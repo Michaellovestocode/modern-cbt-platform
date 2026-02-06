@@ -46,46 +46,44 @@
                 @endphp
 
                 <div class="ml-11">
-                    <div class="ml-11">
-    <!-- Reference Image (if uploaded by teacher) -->
-    @if($question->image_path)
-    <div class="mb-6 border rounded-lg overflow-hidden">
-        <div class="bg-blue-50 px-4 py-2 border-b flex justify-between items-center">
-            <span class="text-sm font-semibold text-blue-700">Target Design / Reference Image</span>
-            <button type="button"
-                    x-data="{ zoomed: false }"
-                    @click="zoomed = !zoomed"
-                    class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                <span x-show="!zoomed">🔍 Zoom In</span>
-                <span x-show="zoomed">🔙 Zoom Out</span>
-            </button>
-        </div>
+                    <!-- Reference Image (if uploaded by teacher) -->
+                    @if($question->image_path)
+                    <div class="mb-6 border rounded-lg overflow-hidden">
+                        <div class="bg-blue-50 px-4 py-2 border-b flex justify-between items-center">
+                            <span class="text-sm font-semibold text-blue-700">Target Design / Reference Image</span>
+                            <button type="button"
+                                    x-data="{ zoomed: false }"
+                                    @click="zoomed = !zoomed"
+                                    class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                <span x-show="!zoomed">🔍 Zoom In</span>
+                                <span x-show="zoomed">🔙 Zoom Out</span>
+                            </button>
+                        </div>
 
-        <!-- Normal View -->
-        <div x-show="!zoomed" class="p-4 bg-white flex justify-center">
-            <img src="{{ $question->getImageUrl() }}" 
-                 alt="Reference design" 
-                 class="max-h-64 object-contain border border-gray-200 rounded shadow-sm">
-        </div>
+                        <!-- Normal View -->
+                        <div x-show="!zoomed" class="p-4 bg-white flex justify-center">
+                            <img src="{{ $question->getImageUrl() }}" 
+                                 alt="Reference design" 
+                                 class="max-h-64 object-contain border border-gray-200 rounded shadow-sm">
+                        </div>
 
-        <!-- Zoomed View (Modal) -->
-        <div x-show="zoomed" 
-             class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-             @click="zoomed = false">
-            <div class="relative max-w-4xl max-h-full" @click.stop>
-                <button @click="zoomed = false"
-                        class="absolute top-2 right-2 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100">
-                    ✕
-                </button>
-                <img src="{{ $question->getImageUrl() }}" 
-                     alt="Reference design zoomed" 
-                     class="max-w-full max-h-screen object-contain rounded-lg shadow-xl">
-            </div>
-        </div>
-    </div>
-    @endif
+                        <!-- Zoomed View (Modal) -->
+                        <div x-show="zoomed" 
+                             class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+                             @click="zoomed = false">
+                            <div class="relative max-w-4xl max-h-full" @click.stop>
+                                <button @click="zoomed = false"
+                                        class="absolute top-2 right-2 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100">
+                                    ✕
+                                </button>
+                                <img src="{{ $question->getImageUrl() }}" 
+                                     alt="Reference design zoomed" 
+                                     class="max-w-full max-h-screen object-contain rounded-lg shadow-xl">
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
-    @if($question->question_type === 'multiple_choice')
                     @if($question->question_type === 'multiple_choice')
                         <!-- Multiple Choice -->
                         <div class="space-y-2">
@@ -126,69 +124,69 @@
                         >{{ $savedAnswer->answer_text ?? '' }}</textarea>
 
                     @elseif($question->question_type === 'coding')
-    <!-- Coding with Live Preview -->
-    <div x-data="{ showPreview: false }">
-        <div class="bg-gray-800 text-gray-200 p-2 rounded-t text-xs font-mono flex justify-between items-center">
-    <span>Code Editor - Write your code below</span>
-    <div class="flex gap-2 items-center">
-        <!-- Example Template Dropdown -->
-        <select id="template-select-{{ $question->id }}" 
-                class="bg-gray-700 text-white text-xs px-2 py-1 rounded border-0"
-                onchange="loadTemplate({{ $question->id }}, this.value)">
-            <option value="">Load Template...</option>
-            <option value="html-basic">HTML Basic</option>
-            <option value="html-form">HTML Form</option>
-            <option value="css-card">CSS Card</option>
-            <option value="js-alert">JS Alert</option>
-        </select>
-        
-        <select id="language-select-{{ $question->id }}" 
-                class="bg-gray-700 text-white text-xs px-2 py-1 rounded border-0">
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="php">PHP</option>
-        </select>
-        
-        <button type="button" 
-                @click="showPreview = !showPreview"
-                class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded">
-            <span x-show="!showPreview">👁️ Show Preview</span>
-            <span x-show="showPreview">📝 Hide Preview</span>
-        </button>
-    </div>
-</div>
+    <!-- Coding with Multi-File Support -->
+    <div x-data="{ showPreview: false }" data-question="{{ $question->id }}">
+        <!-- File Tabs -->
+        <div class="bg-gray-900 p-2 rounded-t flex gap-2 items-center flex-wrap">
+            <button type="button" 
+                    onclick="switchFile({{ $question->id }}, 'index.html')"
+                    class="file-tab bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold">
+                📄 index.html
+            </button>
+            <button type="button"
+                    onclick="switchFile({{ $question->id }}, 'styles.css')"
+                    class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs font-semibold">
+                🎨 styles.css
+            </button>
+            <button type="button"
+                    onclick="switchFile({{ $question->id }}, 'script.js')"
+                    class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs font-semibold">
+                ⚡ script.js
+            </button>
+            
+            <div class="ml-auto flex gap-2">
+                <select id="template-select-{{ $question->id }}" 
+                        onchange="loadTemplate({{ $question->id }}, this.value)"
+                        class="bg-gray-700 text-white text-xs px-2 py-1 rounded">
+                    <option value="">Load Template...</option>
+                    <option value="html-basic">HTML Basic</option>
+                    <option value="html-form">HTML Form</option>
+                    <option value="css-card">CSS Card</option>
+                </select>
+                
+                <button type="button" 
+                        @click="showPreview = !showPreview"
+                        class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded font-semibold">
+                    <span x-show="!showPreview">👁️ Preview</span>
+                    <span x-show="showPreview">📝 Code</span>
+                </button>
+            </div>
+        </div>
 
-        <!-- Split View: Code + Preview -->
+        <!-- Editor + Preview -->
         <div class="grid" :class="showPreview ? 'grid-cols-2 gap-2' : 'grid-cols-1'">
-            <!-- Code Editor -->
             <div>
                 <textarea 
                     id="code-editor-{{ $question->id }}"
                     name="question_{{ $question->id }}"
-                    rows="15"
-                    class="w-full px-4 py-2 border border-t-0 font-mono text-sm focus:ring-2 focus:ring-green-500 bg-gray-50 code-editor"
-                    :class="showPreview ? 'rounded-bl-lg' : 'rounded-b-lg'"
-                    placeholder="// Write your code here..."
+                    class="code-editor"
                     data-question-id="{{ $question->id }}"
                 >{{ $savedAnswer->answer_text ?? '' }}</textarea>
             </div>
 
-            <!-- Live Preview Panel -->
-            <div x-show="showPreview" class="border border-t-0 rounded-br-lg overflow-hidden">
+            <div x-show="showPreview" class="border rounded overflow-hidden bg-white">
                 <div class="bg-gray-100 p-2 border-b flex justify-between items-center">
-                    <span class="text-xs font-semibold text-gray-700">Live Preview</span>
+                    <span class="text-xs font-semibold">Live Preview</span>
                     <button type="button" 
-                            @click="document.getElementById('preview-frame-{{ $question->id }}').contentWindow.location.reload()"
-                            class="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">
+                            @click="updatePreview({{ $question->id }})"
+                            class="text-xs bg-blue-500 text-white px-2 py-1 rounded">
                         🔄 Refresh
                     </button>
                 </div>
                 <iframe 
                     id="preview-frame-{{ $question->id }}"
                     class="w-full bg-white"
-                    style="height: 400px; border: none;"
+                    style="height: 350px; border: none;"
                     sandbox="allow-scripts"
                 ></iframe>
             </div>
@@ -219,11 +217,11 @@
                 </button>
             </div>
         </div>
-    </form>
+   
+        </form>
 </div>
 
 @push('scripts')
-
 <!-- CodeMirror CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
@@ -234,37 +232,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
 
-<!-- CodeMirror Addons for Autocomplete -->
+<!-- Autocomplete -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/css-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/javascript-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/xml-hint.min.js"></script>
-
-<!-- Auto Brackets and Tags -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
 
-<!-- Initialize CodeMirror -->
-<!-- Initialize CodeMirror -->
 <script>
+let editors = {};
+let projectFiles = {}; // Store multiple files per question
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Find all code editor textareas
     const codeEditors = document.querySelectorAll('.code-editor');
-    const editors = {};
     
     codeEditors.forEach(function(textarea) {
         const questionId = textarea.dataset.questionId;
-        const languageSelect = document.getElementById('language-select-' + questionId);
-        const previewFrame = document.getElementById('preview-frame-' + questionId);
         
-        // Initialize CodeMirror
+        // Initialize project files for this question
+        if (!projectFiles[questionId]) {
+            projectFiles[questionId] = {
+                'index.html': textarea.value || '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <h1>Hello World!</h1>\n    <script src="script.js"></script>\n</body>\n</html>',
+                'styles.css': '/* CSS styles */\nbody {\n    font-family: Arial, sans-serif;\n    margin: 20px;\n}\n',
+                'script.js': '// JavaScript code\nconsole.log("Hello World!");'
+            };
+        }
+        
         const editor = CodeMirror.fromTextArea(textarea, {
             mode: 'htmlmixed',
             theme: 'monokai',
@@ -274,13 +273,14 @@ document.addEventListener('DOMContentLoaded', function() {
             matchBrackets: true,
             matchTags: true,
             indentUnit: 4,
-            indentWithTabs: false,
             lineWrapping: true,
             extraKeys: {
                 "Ctrl-Space": "autocomplete",
-                "Ctrl-Enter": function(cm) {
-                    // Run code preview on Ctrl+Enter
-                    updatePreview(questionId);
+                "'<'": function(cm) {
+                    cm.replaceSelection("<");
+                    setTimeout(function() {
+                        CodeMirror.commands.autocomplete(cm);
+                    }, 100);
                 },
                 "Tab": function(cm) {
                     if (cm.somethingSelected()) {
@@ -295,181 +295,138 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Store editor instance
-        editors[questionId] = editor;
+        editors[questionId] = {
+            editor: editor,
+            currentFile: 'index.html'
+        };
         
-        // Function to update preview
-        function updatePreview(qId) {
-            const code = editors[qId].getValue();
-            const frame = document.getElementById('preview-frame-' + qId);
-            
-            if (frame) {
-                const doc = frame.contentDocument || frame.contentWindow.document;
-                doc.open();
-                doc.write(code);
-                doc.close();
-            }
-        }
+        // Load initial file
+        editor.setValue(projectFiles[questionId]['index.html']);
         
-        // Auto-save and update preview on change
+        // Auto-save and preview on change
         let updateTimeout;
         editor.on('change', function() {
             const code = editor.getValue();
             textarea.value = code;
             
-            // Clear previous timeout
-            clearTimeout(updateTimeout);
+            // Save to current file
+            projectFiles[questionId][editors[questionId].currentFile] = code;
             
-            // Update preview after 1 second of no typing (debounce)
+            clearTimeout(updateTimeout);
             updateTimeout = setTimeout(function() {
                 updatePreview(questionId);
             }, 1000);
-            
-            // Trigger auto-save
-            if (window.examApp) {
-                const app = Alpine.$data(document.querySelector('[x-data]'));
-                if (app && app.saveAnswer) {
-                    app.saveAnswer(questionId, code);
+        });
+        
+        // Autocomplete on input
+        editor.on('inputRead', function(cm, change) {
+            if (!cm.state.completionActive) {
+                const char = change.text[0];
+                if (char && char.match(/[a-zA-Z<]/)) {
+                    CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
                 }
             }
         });
         
-        // Language mode switcher
-        if (languageSelect) {
-            languageSelect.addEventListener('change', function() {
-                const mode = this.value;
-                const modeMap = {
+        // Language switcher
+        const langSelect = document.getElementById('language-select-' + questionId);
+        if (langSelect) {
+            langSelect.addEventListener('change', function() {
+                const modes = {
                     'html': 'htmlmixed',
                     'css': 'css',
-                    'javascript': 'javascript',
-                    'python': 'python',
-                    'php': 'php'
+                    'javascript': 'javascript'
                 };
-                editor.setOption('mode', modeMap[mode] || 'htmlmixed');
-                
-                // Update preview for HTML/CSS/JS
-                if (['html', 'css', 'javascript'].includes(mode)) {
-                    updatePreview(questionId);
-                }
+                editor.setOption('mode', modes[this.value] || 'htmlmixed');
             });
         }
         
-        // Trigger autocomplete on input
-        editor.on('inputRead', function(cm, change) {
-            if (!cm.state.completionActive && change.text[0].match(/[a-zA-Z<]/)) {
-                CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
-            }
-        });
-        
-        // Initial preview load
-        if (previewFrame && textarea.value.trim()) {
-            updatePreview(questionId);
-        }
+        // Initial preview
+        setTimeout(() => updatePreview(questionId), 500);
     });
 });
-</script>
-<script>
-// Code Templates
-const codeTemplates = {
-    'html-basic': `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Page</title>
-</head>
-<body>
-    <h1>Hello World!</h1>
-    <p>This is a paragraph.</p>
-</body>
-</html>`,
-    
-    'html-form': `<!DOCTYPE html>
-<html>
-<head>
-    <title>Form Example</title>
-</head>
-<body>
-    <form>
-        <label>Name:</label>
-        <input type="text" name="name" placeholder="Enter your name">
-        <br><br>
-        <label>Email:</label>
-        <input type="email" name="email" placeholder="Enter your email">
-        <br><br>
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>`,
-    
-    'css-card': `<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        .card {
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .card h2 {
-            color: #333;
-            margin-top: 0;
-        }
-        .card p {
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h2>Card Title</h2>
-        <p>This is a card with some text.</p>
-    </div>
-</body>
-</html>`,
-    
-    'js-alert': `<!DOCTYPE html>
-<html>
-<head>
-    <title>JavaScript Example</title>
-</head>
-<body>
-    <button onclick="showMessage()">Click Me!</button>
-    
-    <script>
-        function showMessage() {
-            alert('Hello from JavaScript!');
-        }
-    </script>
-</body>
-</html>`
-};
 
-function loadTemplate(questionId, templateKey) {
-    if (!templateKey) return;
+function updatePreview(questionId) {
+    const frame = document.getElementById('preview-frame-' + questionId);
+    if (!frame) return;
     
-    const template = codeTemplates[templateKey];
-    if (template) {
-        // Find the CodeMirror editor
-        const textareas = document.querySelectorAll('.code-editor');
-        textareas.forEach(function(textarea) {
-            if (textarea.dataset.questionId == questionId) {
-                const cm = textarea.nextSibling;
-                if (cm && cm.CodeMirror) {
-                    cm.CodeMirror.setValue(template);
-                }
-            }
-        });
+    const files = projectFiles[questionId];
+    let html = files['index.html'] || '';
+    
+    // Inject CSS
+    if (files['styles.css']) {
+        html = html.replace('</head>', '<style>' + files['styles.css'] + '</style></head>');
     }
     
-    // Reset select
+    // Inject JS
+    if (files['script.js']) {
+        html = html.replace('</body>', '<script>' + files['script.js'] + '</script></body>');
+    }
+    
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+}
+
+function switchFile(questionId, filename) {
+    const editorObj = editors[questionId];
+    if (!editorObj) return;
+    
+    // Save current file
+    projectFiles[questionId][editorObj.currentFile] = editorObj.editor.getValue();
+    
+    // Switch to new file
+    editorObj.currentFile = filename;
+    editorObj.editor.setValue(projectFiles[questionId][filename] || '');
+    
+    // Update mode
+    const modes = {
+        'index.html': 'htmlmixed',
+        'styles.css': 'css',
+        'script.js': 'javascript'
+    };
+    editorObj.editor.setOption('mode', modes[filename] || 'htmlmixed');
+    
+    // Update active button
+    document.querySelectorAll(`[data-question="${questionId}"] .file-tab`).forEach(btn => {
+        btn.classList.remove('bg-green-600', 'text-white');
+        btn.classList.add('bg-gray-700', 'text-gray-300');
+    });
+    event.target.classList.remove('bg-gray-700', 'text-gray-300');
+    event.target.classList.add('bg-green-600', 'text-white');
+}
+
+function loadTemplate(questionId, templateKey) {
+    const templates = {
+        'html-basic': {
+            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Page</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <h1>Hello World!</h1>\n    <p>This is a paragraph.</p>\n</body>\n</html>',
+            'styles.css': 'body {\n    font-family: Arial;\n    margin: 20px;\n    background: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n}',
+            'script.js': 'console.log("Page loaded!");'
+        },
+        'html-form': {
+            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>Form</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <form>\n        <label>Name:</label>\n        <input type="text" id="name">\n        <button type="button" onclick="greet()">Submit</button>\n    </form>\n    <script src="script.js"></script>\n</body>\n</html>',
+            'styles.css': 'form {\n    max-width: 400px;\n    margin: 40px auto;\n    padding: 20px;\n    background: white;\n    border-radius: 8px;\n}\n\ninput {\n    display: block;\n    width: 100%;\n    padding: 10px;\n    margin: 10px 0;\n}',
+            'script.js': 'function greet() {\n    const name = document.getElementById("name").value;\n    alert("Hello " + name + "!");\n}'
+        },
+        'css-card': {
+            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <div class="card">\n        <h2>Card Title</h2>\n        <p>Card content here</p>\n    </div>\n</body>\n</html>',
+            'styles.css': 'body {\n    background: #f3f4f6;\n    padding: 40px;\n}\n\n.card {\n    background: white;\n    padding: 20px;\n    border-radius: 12px;\n    box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n    max-width: 300px;\n}\n\n.card:hover {\n    transform: translateY(-5px);\n    transition: 0.3s;\n}',
+            'script.js': '// Add interactivity here'
+        }
+    };
+    
+    if (templates[templateKey]) {
+        if (confirm('Load template? This will replace your current files.')) {
+            projectFiles[questionId] = templates[templateKey];
+            editors[questionId].editor.setValue(projectFiles[questionId]['index.html']);
+            updatePreview(questionId);
+        }
+    }
+    
     document.getElementById('template-select-' + questionId).value = '';
 }
-</script>
 
-<script>
 function examApp() {
     return {
         timeRemaining: {{ $attempt->time_remaining ?? ($attempt->exam->duration_minutes * 60) }},
@@ -480,10 +437,9 @@ function examApp() {
         timeExpired: false,
 
         init() {
-            // Check if time has already expired
             if (this.timeRemaining <= 0) {
                 this.timeExpired = true;
-                this.submitExam(true); // Auto-submit without confirmation
+                this.submitExam(true);
             } else {
                 this.startTimer();
                 this.autoSave();
@@ -498,7 +454,7 @@ function examApp() {
                     if (!this.timeExpired) {
                         this.timeExpired = true;
                         clearInterval(this.timer);
-                        this.submitExam(true); // Pass true to skip confirmation
+                        this.submitExam(true);
                     }
                 }
             }, 1000);
@@ -509,7 +465,7 @@ function examApp() {
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
             const secs = seconds % 60;
-            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
         },
 
         autoSave() {
@@ -517,14 +473,12 @@ function examApp() {
                 if (!this.timeExpired && this.timeRemaining > 0) {
                     this.saveCurrentAnswers();
                 }
-            }, 30000); // Auto-save every 30 seconds
+            }, 30000);
         },
 
         async saveAnswer(questionId, answer) {
             if (this.timeExpired || this.isSubmitting) return;
-
             this.isSaving = true;
-            this.lastSaved = false;
 
             try {
                 const response = await fetch('{{ route("student.save-answer", $attempt->id) }}', {
@@ -553,7 +507,6 @@ function examApp() {
 
         async saveCurrentAnswers() {
             if (this.timeExpired || this.isSubmitting) return;
-
             const form = document.getElementById('exam-form');
             const formData = new FormData(form);
             
@@ -566,27 +519,22 @@ function examApp() {
         },
 
         async submitExam(autoSubmit = false) {
-            // Prevent double submission
             if (this.isSubmitting) return;
 
-            // Show confirmation unless auto-submitting
-            if (!autoSubmit && !confirm('Are you sure you want to submit this exam? You cannot change your answers after submission.')) {
+            if (!autoSubmit && !confirm('Submit exam? You cannot change answers after submission.')) {
                 return;
             }
 
-            // If time expired, show alert once
             if (autoSubmit && this.timeRemaining <= 0) {
-                alert('Time is up! Submitting your exam automatically.');
+                alert('Time is up! Submitting automatically.');
             }
 
             clearInterval(this.timer);
             this.isSubmitting = true;
             this.timeExpired = true;
 
-            // Save all current answers first
             await this.saveCurrentAnswers();
 
-            // Submit the exam
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("student.submit-exam", $attempt->id) }}';
@@ -606,14 +554,9 @@ function examApp() {
 
 <style>
 .CodeMirror {
-    height: 400px;
+    height: 350px;
     font-size: 14px;
     border: 1px solid #e5e7eb;
-    border-top: none;
-}
-
-.grid-cols-2 .CodeMirror {
-    border-right: none;
 }
 
 .CodeMirror-hints {
@@ -630,12 +573,7 @@ function examApp() {
     background: #16a34a;
     color: white;
 }
-
-/* Preview frame styling */
-#preview-frame {
-    background: white;
-}
 </style>
-
 @endpush
+
 @endsection
