@@ -33,7 +33,7 @@
                     <div class="flex-1">
                         <p class="text-gray-800 font-medium mb-2">{{ $question->question_text }}</p>
                         <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                            {{ $question->marks }} {{ $question->marks == 1 ? 'mark' : 'marks' }}
+                            {{ $question->marks }} marks
                         </span>
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded ml-2">
                             {{ ucwords(str_replace('_', ' ', $question->question_type)) }}
@@ -46,223 +46,250 @@
                 @endphp
 
                 <div class="ml-11">
-                    <!-- Reference Image (if uploaded by teacher) -->
-                    @if($question->image_path)
-                    <div class="mb-6 border rounded-lg overflow-hidden">
-                        <div class="bg-blue-50 px-4 py-2 border-b flex justify-between items-center">
-                            <span class="text-sm font-semibold text-blue-700">Target Design / Reference Image</span>
-                            <button type="button"
-                                    x-data="{ zoomed: false }"
-                                    @click="zoomed = !zoomed"
-                                    class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                <span x-show="!zoomed">🔍 Zoom In</span>
-                                <span x-show="zoomed">🔙 Zoom Out</span>
-                            </button>
-                        </div>
-
-                        <!-- Normal View -->
-                        <div x-show="!zoomed" class="p-4 bg-white flex justify-center">
-                            <img src="{{ $question->getImageUrl() }}" 
-                                 alt="Reference design" 
-                                 class="max-h-64 object-contain border border-gray-200 rounded shadow-sm">
-                        </div>
-
-                        <!-- Zoomed View (Modal) -->
-                        <div x-show="zoomed" 
-                             class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-                             @click="zoomed = false">
-                            <div class="relative max-w-4xl max-h-full" @click.stop>
-                                <button @click="zoomed = false"
-                                        class="absolute top-2 right-2 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100">
-                                    ✕
-                                </button>
-                                <img src="{{ $question->getImageUrl() }}" 
-                                     alt="Reference design zoomed" 
-                                     class="max-w-full max-h-screen object-contain rounded-lg shadow-xl">
-                            </div>
-                        </div>
-                    </div>
-                    @endif
+                   @if($question->image_path)
+<div class="mb-6 border rounded-lg overflow-hidden" x-data="{ zoomed: false }">
+    <div class="bg-blue-50 px-4 py-2 border-b">
+        <span class="text-sm font-semibold text-blue-700">Reference Image</span>
+        <!-- DEBUG INFO -->
+        <div class="text-xs mt-2 bg-yellow-100 p-2 rounded">
+            <p><strong>Path in DB:</strong> {{ $question->image_path }}</p>
+            <p><strong>Full URL:</strong> {{ asset('storage/' . $question->image_path) }}</p>
+            <p><strong>File exists:</strong> {{ file_exists(public_path('storage/' . $question->image_path)) ? 'YES ✓' : 'NO ✗' }}</p>
+        </div>
+    </div>
+    
+    <div class="p-4 bg-white">
+        <img src="{{ asset('storage/' . $question->image_path) }}" 
+             alt="Reference" 
+             onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3EImage not found%3C/text%3E%3C/svg%3E';"
+             class="max-h-64 mx-auto border rounded">
+    </div>
+</div>
+@endif
 
                     @if($question->question_type === 'multiple_choice')
-                        <!-- Multiple Choice -->
                         <div class="space-y-2">
                             @foreach($question->options as $key => $option)
-                            <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer transition">
+                            <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer">
                                 <input 
                                     type="radio" 
                                     name="question_{{ $question->id }}" 
                                     value="{{ $key }}"
                                     {{ $savedAnswer && $savedAnswer->answer_text == $key ? 'checked' : '' }}
                                     @change="saveAnswer({{ $question->id }}, $event.target.value)"
-                                    class="mr-3 h-4 w-4 text-green-600"
-                                >
+                                    class="mr-3 h-4 w-4 text-green-600">
                                 <span><strong>{{ $key }}.</strong> {{ $option }}</span>
                             </label>
                             @endforeach
                         </div>
 
                     @elseif($question->question_type === 'fill_blank')
-                        <!-- Fill in the Blank -->
                         <input 
                             type="text" 
                             name="question_{{ $question->id }}"
                             value="{{ $savedAnswer->answer_text ?? '' }}"
                             @change="saveAnswer({{ $question->id }}, $event.target.value)"
                             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                            placeholder="Type your answer here..."
-                        >
+                            placeholder="Type your answer...">
 
                     @elseif($question->question_type === 'theory')
-                        <!-- Theory/Essay -->
                         <textarea 
                             name="question_{{ $question->id }}"
                             rows="8"
                             @change="saveAnswer({{ $question->id }}, $event.target.value)"
                             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                            placeholder="Write your answer here..."
-                        >{{ $savedAnswer->answer_text ?? '' }}</textarea>
+                            placeholder="Write your answer...">{{ $savedAnswer->answer_text ?? '' }}</textarea>
 
                     @elseif($question->question_type === 'coding')
-    <!-- Coding with Multi-File Support -->
-    <div x-data="{ showPreview: false }" data-question="{{ $question->id }}">
-        <!-- File Tabs -->
-        <div class="bg-gray-900 p-2 rounded-t flex gap-2 items-center flex-wrap">
-            <button type="button" 
-                    onclick="switchFile({{ $question->id }}, 'index.html')"
-                    class="file-tab bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold">
-                📄 index.html
-            </button>
-            <button type="button"
-                    onclick="switchFile({{ $question->id }}, 'styles.css')"
-                    class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs font-semibold">
-                🎨 styles.css
-            </button>
-            <button type="button"
-                    onclick="switchFile({{ $question->id }}, 'script.js')"
-                    class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs font-semibold">
-                ⚡ script.js
-            </button>
-            
-            <div class="ml-auto flex gap-2">
-                <select id="template-select-{{ $question->id }}" 
-                        onchange="loadTemplate({{ $question->id }}, this.value)"
-                        class="bg-gray-700 text-white text-xs px-2 py-1 rounded">
-                    <option value="">Load Template...</option>
-                    <option value="html-basic">HTML Basic</option>
-                    <option value="html-form">HTML Form</option>
-                    <option value="css-card">CSS Card</option>
-                </select>
-                
-                <button type="button" 
-                        @click="showPreview = !showPreview"
-                        class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded font-semibold">
-                    <span x-show="!showPreview">👁️ Preview</span>
-                    <span x-show="showPreview">📝 Code</span>
-                </button>
-            </div>
-        </div>
+                        <div x-data="{ showPreview: false }" data-question="{{ $question->id }}">
+                            <div class="bg-gray-900 p-2 rounded-t flex gap-2 flex-wrap items-center">
+                                <button type="button" 
+                                        onclick="switchFile({{ $question->id }}, 'index.html')"
+                                        class="file-tab bg-green-600 text-white px-3 py-1 rounded text-xs">
+                                    📄 HTML
+                                </button>
+                                <button type="button"
+                                        onclick="switchFile({{ $question->id }}, 'styles.css')"
+                                        class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">
+                                    🎨 CSS
+                                </button>
+                                <button type="button"
+                                        onclick="switchFile({{ $question->id }}, 'script.js')"
+                                        class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">
+                                    ⚡ JS
+                                </button>
+                                
+                                <div class="ml-auto flex gap-2">
+                                    <button type="button" 
+                                            @click="showPreview = !showPreview"
+                                            class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded">
+                                        <span x-show="!showPreview">👁️ Preview</span>
+                                        <span x-show="showPreview">📝 Code</span>
+                                    </button>
+                                </div>
+                            </div>
 
-        <!-- Editor + Preview -->
-        <div class="grid" :class="showPreview ? 'grid-cols-2 gap-2' : 'grid-cols-1'">
-            <div>
-                <textarea 
-                    id="code-editor-{{ $question->id }}"
-                    name="question_{{ $question->id }}"
-                    class="code-editor"
-                    data-question-id="{{ $question->id }}"
-                >{{ $savedAnswer->answer_text ?? '' }}</textarea>
-            </div>
+                            <div class="grid" :class="showPreview ? 'grid-cols-2 gap-2' : 'grid-cols-1'">
+                                <div>
+                                    <textarea 
+                                        id="code-editor-{{ $question->id }}"
+                                        name="question_{{ $question->id }}"
+                                        class="code-editor"
+                                        data-question-id="{{ $question->id }}">{{ $savedAnswer->answer_text ?? '' }}</textarea>
+                                </div>
 
-            <div x-show="showPreview" class="border rounded overflow-hidden bg-white">
-                <div class="bg-gray-100 p-2 border-b flex justify-between items-center">
-                    <span class="text-xs font-semibold">Live Preview</span>
-                    <button type="button" 
-                            @click="updatePreview({{ $question->id }})"
-                            class="text-xs bg-blue-500 text-white px-2 py-1 rounded">
-                        🔄 Refresh
-                    </button>
-                </div>
-                <iframe 
-                    id="preview-frame-{{ $question->id }}"
-                    class="w-full bg-white"
-                    style="height: 350px; border: none;"
-                    sandbox="allow-scripts"
-                ></iframe>
-            </div>
-        </div>
-    </div>
-@endif
+                                <div x-show="showPreview" class="border rounded overflow-hidden">
+                                    <div class="bg-gray-100 p-2 border-b flex justify-between items-center">
+                                        <span class="text-xs font-semibold">Preview</span>
+                                        <button type="button" 
+                                                @click="updatePreview({{ $question->id }})"
+                                                class="text-xs bg-blue-500 text-white px-2 py-1 rounded">
+                                            🔄
+                                        </button>
+                                    </div>
+                                    <iframe 
+    id="preview-frame-{{ $question->id }}"
+    style="width:100%; height:350px; border:none; background:white;"
+    sandbox="allow-scripts allow-same-origin">
+</iframe>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             @endforeach
         </div>
 
-        <!-- Submit Section -->
         <div class="bg-white rounded-lg shadow p-6 mt-6">
             <div class="flex justify-between items-center">
                 <div class="text-sm text-gray-600">
                     <span x-show="isSaving" class="text-yellow-600">💾 Saving...</span>
-                    <span x-show="lastSaved && !isSaving" class="text-green-600">✓ All answers saved</span>
-                    <span class="ml-4">Auto-save every 30 seconds</span>
+                    <span x-show="lastSaved && !isSaving" class="text-green-600">✓ Saved</span>
                 </div>
                 <button 
                     type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition"
-                    :disabled="isSubmitting"
-                    :class="{ 'opacity-50 cursor-not-allowed': isSubmitting }"
-                >
+                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold"
+                    :disabled="isSubmitting">
                     <span x-show="!isSubmitting">Submit Exam</span>
                     <span x-show="isSubmitting">Submitting...</span>
                 </button>
             </div>
         </div>
-   
-        </form>
+    </form>
 </div>
 
 @push('scripts')
-<!-- CodeMirror CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 
-<!-- CodeMirror JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
-
-<!-- Autocomplete -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/css-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/javascript-hint.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/xml-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/anyword-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
 
 <script>
+    CodeMirror.commands.insertTagPair = function(cm, tag) {
+    const cursor = cm.getCursor();
+    const closeTag = `</${tag}>`;
+    cm.replaceSelection(`<${tag}>${closeTag}`);
+    cm.setCursor({ line: cursor.line, ch: cursor.ch + tag.length + 2 });
+};
+
 let editors = {};
-let projectFiles = {}; // Store multiple files per question
+let projectFiles = {};
+
+// Enhanced CSS autocomplete with colors and values
+CodeMirror.registerHelper("hint", "css", function(editor) {
+    const cur = editor.getCursor();
+    const token = editor.getTokenAt(cur);
+    const inner = CodeMirror.innerMode(editor.getMode(), token.state);
+    
+    if (inner.mode.name !== "css") return;
+
+    const propertyHints = [
+        "background", "background-color", "background-image", "background-position", "background-size",
+        "color", "border", "border-radius", "margin", "padding", "width", "height",
+        "display", "flex", "grid", "position", "top", "left", "right", "bottom",
+        "font-size", "font-family", "font-weight", "text-align", "line-height"
+    ];
+
+    const colorValues = [
+        "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", 
+        "#ffff00", "#00ffff", "#ff00ff", "#808080", "#c0c0c0",
+        "red", "green", "blue", "yellow", "orange", "purple", "pink",
+        "black", "white", "gray", "transparent",
+        "rgb(255, 0, 0)", "rgba(0, 0, 0, 0.5)", "hsl(0, 100%, 50%)"
+    ];
+
+    const displayValues = ["block", "inline", "inline-block", "flex", "grid", "none"];
+    const positionValues = ["relative", "absolute", "fixed", "sticky", "static"];
+
+    const line = editor.getLine(cur.line);
+    const colonIndex = line.lastIndexOf(':', cur.ch);
+    
+    // After colon - suggest values
+    if (colonIndex > -1 && colonIndex < cur.ch) {
+        const property = line.substring(0, colonIndex).trim().split(/\s+/).pop();
+        let values = [];
+        
+        if (property.includes('color') || property === 'background') {
+            values = colorValues;
+        } else if (property === 'display') {
+            values = displayValues;
+        } else if (property === 'position') {
+            values = positionValues;
+        } else if (property.includes('width') || property.includes('height') || property.includes('margin') || property.includes('padding')) {
+            values = ["0", "auto", "10px", "20px", "50px", "100px", "100%", "1em", "1rem"];
+        } else {
+            values = ["auto", "none", "inherit", "initial"];
+        }
+
+        return {
+            list: values.map(v => v.includes(':') || v.includes('(') ? v : v + ';'),
+            from: CodeMirror.Pos(cur.line, colonIndex + 1),
+            to: cur
+        };
+    }
+    
+    // Before colon - suggest properties
+    return {
+        list: propertyHints.map(p => p + ': '),
+        from: CodeMirror.Pos(cur.line, token.start),
+        to: cur
+    };
+});
 
 document.addEventListener('DOMContentLoaded', function() {
-    const codeEditors = document.querySelectorAll('.code-editor');
-    
-    codeEditors.forEach(function(textarea) {
-        const questionId = textarea.dataset.questionId;
+    document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        alert("Use the autosave or submit button — Ctrl+S is disabled!");
+    }
+});
+    document.querySelectorAll('.code-editor').forEach(function(textarea) {
+        const qId = textarea.dataset.questionId;
         
-        // Initialize project files for this question
-        if (!projectFiles[questionId]) {
-            projectFiles[questionId] = {
-                'index.html': textarea.value || '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <h1>Hello World!</h1>\n    <script src="script.js"></script>\n</body>\n</html>',
-                'styles.css': '/* CSS styles */\nbody {\n    font-family: Arial, sans-serif;\n    margin: 20px;\n}\n',
-                'script.js': '// JavaScript code\nconsole.log("Hello World!");'
-            };
-        }
+        projectFiles[qId] = {
+            'index.html': textarea.value || '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Website</title>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <script src="script.js"><\/script>\n</body>\n</html>',
+        'styles.css': '',
+            'script.js': '// Your JavaScript here\nconsole.log("Ready!");'
+        };
         
         const editor = CodeMirror.fromTextArea(textarea, {
             mode: 'htmlmixed',
@@ -272,159 +299,176 @@ document.addEventListener('DOMContentLoaded', function() {
             autoCloseTags: true,
             matchBrackets: true,
             matchTags: true,
-            indentUnit: 4,
             lineWrapping: true,
+            indentUnit: 2,
+            tabSize: 2,
             extraKeys: {
                 "Ctrl-Space": "autocomplete",
-                "'<'": function(cm) {
-                    cm.replaceSelection("<");
-                    setTimeout(function() {
-                        CodeMirror.commands.autocomplete(cm);
-                    }, 100);
+            "'<'": function(cm) {
+    if (cm.getMode().name === "htmlmixed") {
+        cm.replaceSelection("<");
+        setTimeout(() => {
+            CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+            });
+        }, 50);
+    } else {
+        cm.replaceSelection("<");
+    }
+},
+
+                "':'": function(cm) {
+                    // Auto-trigger for CSS properties
+                    if (cm.getMode().name === 'css') {
+                        cm.replaceSelection(": ");
+                        setTimeout(() => CodeMirror.commands.autocomplete(cm), 50);
+                    } else {
+                        return CodeMirror.Pass;
+                    }
                 },
                 "Tab": function(cm) {
                     if (cm.somethingSelected()) {
                         cm.indentSelection("add");
                     } else {
-                        cm.replaceSelection("    ", "end");
+                        cm.replaceSelection("  ", "end");
                     }
                 }
             },
             hintOptions: {
-                completeSingle: false
+                completeSingle: false,
+                closeCharacters: /[\s()\[\]{};>,]/
             }
         });
         
-        editors[questionId] = {
-            editor: editor,
-            currentFile: 'index.html'
-        };
+        editors[qId] = { editor: editor, currentFile: 'index.html' };
+        editor.setValue(projectFiles[qId]['index.html']);
         
-        // Load initial file
-        editor.setValue(projectFiles[questionId]['index.html']);
-        
-        // Auto-save and preview on change
-        let updateTimeout;
+        let previewTimeout;
         editor.on('change', function() {
             const code = editor.getValue();
             textarea.value = code;
+            projectFiles[qId][editors[qId].currentFile] = code;
             
-            // Save to current file
-            projectFiles[questionId][editors[questionId].currentFile] = code;
-            
-            clearTimeout(updateTimeout);
-            updateTimeout = setTimeout(function() {
-                updatePreview(questionId);
-            }, 1000);
+            // Auto-update preview
+            clearTimeout(previewTimeout);
+            previewTimeout = setTimeout(() => updatePreview(qId), 1000);
         });
         
-        // Autocomplete on input
+        // Enhanced autocomplete
         editor.on('inputRead', function(cm, change) {
             if (!cm.state.completionActive) {
                 const char = change.text[0];
-                if (char && char.match(/[a-zA-Z<]/)) {
+                const mode = cm.getMode().name;
+                
+                // HTML: trigger on < or letter after 
+                if (mode === "htmlmixed") {
+    const cursor = cm.getCursor();
+    const token = cm.getTokenAt(cursor);
+
+    if (token.string.startsWith("<") && /<[a-zA-Z0-9-]*$/.test(token.string)) {
+        CodeMirror.commands.autocomplete(cm, null, {
+            completeSingle: false
+        });
+    }
+}
+                
+                // CSS: trigger on letters
+                if (mode === 'css' && char && char.match(/[a-zA-Z-]/)) {
+                    CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
+                }
+                
+                // JavaScript: trigger on letters and dot
+                if (mode === 'javascript' && char && char.match(/[a-zA-Z.]/)) {
                     CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
                 }
             }
         });
         
-        // Language switcher
-        const langSelect = document.getElementById('language-select-' + questionId);
-        if (langSelect) {
-            langSelect.addEventListener('change', function() {
-                const modes = {
-                    'html': 'htmlmixed',
-                    'css': 'css',
-                    'javascript': 'javascript'
-                };
-                editor.setOption('mode', modes[this.value] || 'htmlmixed');
-            });
-        }
-        
         // Initial preview
-        setTimeout(() => updatePreview(questionId), 500);
+        setTimeout(() => updatePreview(qId), 500);
     });
 });
 
-function updatePreview(questionId) {
-    const frame = document.getElementById('preview-frame-' + questionId);
-    if (!frame) return;
+function updatePreview(qId) {
+    const frame = document.getElementById('preview-frame-' + qId);
+    if (!frame) {
+        console.log('Preview frame not found for question', qId);
+        return;
+    }
     
-    const files = projectFiles[questionId];
+    const files = projectFiles[qId];
+    if (!files) {
+        console.log('No files found for question', qId);
+        return;
+    }
+    
     let html = files['index.html'] || '';
     
-    // Inject CSS
+    // Inject CSS inline
     if (files['styles.css']) {
-        html = html.replace('</head>', '<style>' + files['styles.css'] + '</style></head>');
+        const cssTag = '<style>' + files['styles.css'] + '</style>';
+        if (html.includes('</head>')) {
+            html = html.replace('</head>', cssTag + '</head>');
+        } else {
+            html = cssTag + html;
+        }
     }
     
-    // Inject JS
+    // Inject JS inline
     if (files['script.js']) {
-        html = html.replace('</body>', '<script>' + files['script.js'] + '</script></body>');
+    const jsTag = '<script>' + files['script.js'] + '<\/script>';
+    if (html.includes('</body>')) {
+        html = html.replace('</body>', jsTag + '</body>');
+    } else {
+        html = html + jsTag;
     }
-    
-    const doc = frame.contentDocument || frame.contentWindow.document;
-    doc.open();
-    doc.write(html);
-    doc.close();
 }
 
-function switchFile(questionId, filename) {
-    const editorObj = editors[questionId];
-    if (!editorObj) return;
+    
+    console.log('Updating preview for question', qId);
+    
+    try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+    } catch (e) {
+        console.error('Preview error:', e);
+    }
+}
+
+function switchFile(qId, filename) {
+    const obj = editors[qId];
+    if (!obj) return;
     
     // Save current file
-    projectFiles[questionId][editorObj.currentFile] = editorObj.editor.getValue();
+    projectFiles[qId][obj.currentFile] = obj.editor.getValue();
     
     // Switch to new file
-    editorObj.currentFile = filename;
-    editorObj.editor.setValue(projectFiles[questionId][filename] || '');
+    obj.currentFile = filename;
+    obj.editor.setValue(projectFiles[qId][filename] || '');
     
     // Update mode
-    const modes = {
-        'index.html': 'htmlmixed',
-        'styles.css': 'css',
-        'script.js': 'javascript'
+    const modes = { 
+        'index.html': 'htmlmixed', 
+        'styles.css': 'css', 
+        'script.js': 'javascript' 
     };
-    editorObj.editor.setOption('mode', modes[filename] || 'htmlmixed');
+    obj.editor.setOption('mode', modes[filename]);
     
     // Update active button
-    document.querySelectorAll(`[data-question="${questionId}"] .file-tab`).forEach(btn => {
+    document.querySelectorAll('[data-question="' + qId + '"] .file-tab').forEach(btn => {
         btn.classList.remove('bg-green-600', 'text-white');
         btn.classList.add('bg-gray-700', 'text-gray-300');
     });
     event.target.classList.remove('bg-gray-700', 'text-gray-300');
     event.target.classList.add('bg-green-600', 'text-white');
-}
-
-function loadTemplate(questionId, templateKey) {
-    const templates = {
-        'html-basic': {
-            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Page</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <h1>Hello World!</h1>\n    <p>This is a paragraph.</p>\n</body>\n</html>',
-            'styles.css': 'body {\n    font-family: Arial;\n    margin: 20px;\n    background: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n}',
-            'script.js': 'console.log("Page loaded!");'
-        },
-        'html-form': {
-            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>Form</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <form>\n        <label>Name:</label>\n        <input type="text" id="name">\n        <button type="button" onclick="greet()">Submit</button>\n    </form>\n    <script src="script.js"></script>\n</body>\n</html>',
-            'styles.css': 'form {\n    max-width: 400px;\n    margin: 40px auto;\n    padding: 20px;\n    background: white;\n    border-radius: 8px;\n}\n\ninput {\n    display: block;\n    width: 100%;\n    padding: 10px;\n    margin: 10px 0;\n}',
-            'script.js': 'function greet() {\n    const name = document.getElementById("name").value;\n    alert("Hello " + name + "!");\n}'
-        },
-        'css-card': {
-            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <div class="card">\n        <h2>Card Title</h2>\n        <p>Card content here</p>\n    </div>\n</body>\n</html>',
-            'styles.css': 'body {\n    background: #f3f4f6;\n    padding: 40px;\n}\n\n.card {\n    background: white;\n    padding: 20px;\n    border-radius: 12px;\n    box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n    max-width: 300px;\n}\n\n.card:hover {\n    transform: translateY(-5px);\n    transition: 0.3s;\n}',
-            'script.js': '// Add interactivity here'
-        }
-    };
     
-    if (templates[templateKey]) {
-        if (confirm('Load template? This will replace your current files.')) {
-            projectFiles[questionId] = templates[templateKey];
-            editors[questionId].editor.setValue(projectFiles[questionId]['index.html']);
-            updatePreview(questionId);
-        }
-    }
-    
-    document.getElementById('template-select-' + questionId).value = '';
+    // Refresh autocomplete for new mode
+    setTimeout(() => {
+        obj.editor.refresh();
+        obj.editor.focus();
+    }, 10);
 }
 
 function examApp() {
@@ -438,7 +482,6 @@ function examApp() {
 
         init() {
             if (this.timeRemaining <= 0) {
-                this.timeExpired = true;
                 this.submitExam(true);
             } else {
                 this.startTimer();
@@ -451,100 +494,67 @@ function examApp() {
                 if (this.timeRemaining > 0) {
                     this.timeRemaining--;
                 } else {
-                    if (!this.timeExpired) {
-                        this.timeExpired = true;
-                        clearInterval(this.timer);
-                        this.submitExam(true);
-                    }
+                    clearInterval(this.timer);
+                    this.submitExam(true);
                 }
             }, 1000);
         },
 
         formatTime(seconds) {
-            if (seconds < 0) seconds = 0;
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
         },
 
         autoSave() {
             setInterval(() => {
-                if (!this.timeExpired && this.timeRemaining > 0) {
-                    this.saveCurrentAnswers();
+                if (this.timeRemaining > 0 && !this.isSubmitting) {
+                    const form = document.getElementById('exam-form');
+                    const formData = new FormData(form);
+                    
+                    for (let [key, value] of formData.entries()) {
+                        if (key.startsWith('question_')) {
+                            const qId = key.replace('question_', '');
+                            this.saveAnswer(qId, value);
+                        }
+                    }
                 }
             }, 30000);
         },
 
-        async saveAnswer(questionId, answer) {
-            if (this.timeExpired || this.isSubmitting) return;
+        async saveAnswer(qId, answer) {
             this.isSaving = true;
-
             try {
-                const response = await fetch('{{ route("student.save-answer", $attempt->id) }}', {
+                await fetch('{{ route("student.save-answer", $attempt->id) }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     body: JSON.stringify({
-                        question_id: questionId,
+                        question_id: qId,
                         answer_text: answer,
                         time_remaining: this.timeRemaining
                     })
                 });
-
-                if (response.ok) {
-                    this.lastSaved = true;
-                    setTimeout(() => this.lastSaved = false, 2000);
-                }
-            } catch (error) {
-                console.error('Save error:', error);
+                this.lastSaved = true;
+                setTimeout(() => this.lastSaved = false, 2000);
             } finally {
                 this.isSaving = false;
             }
         },
 
-        async saveCurrentAnswers() {
-            if (this.timeExpired || this.isSubmitting) return;
-            const form = document.getElementById('exam-form');
-            const formData = new FormData(form);
-            
-            for (let [key, value] of formData.entries()) {
-                if (key.startsWith('question_')) {
-                    const questionId = key.replace('question_', '');
-                    await this.saveAnswer(questionId, value);
-                }
-            }
-        },
-
-        async submitExam(autoSubmit = false) {
+        async submitExam(auto = false) {
             if (this.isSubmitting) return;
-
-            if (!autoSubmit && !confirm('Submit exam? You cannot change answers after submission.')) {
-                return;
-            }
-
-            if (autoSubmit && this.timeRemaining <= 0) {
-                alert('Time is up! Submitting automatically.');
-            }
-
-            clearInterval(this.timer);
+            if (!auto && !confirm('Submit exam? You cannot change your answers after submission.')) return;
+            if (auto) alert('Time is up! Submitting automatically.');
+            
             this.isSubmitting = true;
-            this.timeExpired = true;
-
-            await this.saveCurrentAnswers();
-
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("student.submit-exam", $attempt->id) }}';
-            
-            const csrf = document.createElement('input');
-            csrf.type = 'hidden';
-            csrf.name = '_token';
-            csrf.value = document.querySelector('meta[name="csrf-token"]').content;
-            form.appendChild(csrf);
-            
+            form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
             document.body.appendChild(form);
             form.submit();
         }
@@ -553,26 +563,25 @@ function examApp() {
 </script>
 
 <style>
-.CodeMirror {
-    height: 350px;
+.CodeMirror { 
+    height: 350px; 
+    border: 1px solid #e5e7eb; 
     font-size: 14px;
-    border: 1px solid #e5e7eb;
 }
-
-.CodeMirror-hints {
-    z-index: 1000;
-    font-family: monospace;
-    font-size: 13px;
+.CodeMirror-hints { 
+    z-index: 10000 !important;
+    max-height: 200px;
+    overflow-y: auto;
 }
-
 .CodeMirror-hint {
     padding: 4px 8px;
+    cursor: pointer;
 }
-
 .CodeMirror-hint-active {
     background: #16a34a;
     color: white;
 }
+[x-cloak] { display: none; }
 </style>
 @endpush
 
