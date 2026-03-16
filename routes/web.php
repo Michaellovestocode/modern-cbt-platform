@@ -90,3 +90,9 @@ Route::put('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exam.
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('/admin/exams/{attempt}/submit-for-student', [AdminExamController::class, 'submitForStudent'])
+    ->name('admin.submit-for-student');
+
+    Route::get('/admin/exams/{attempt}/preview', [AdminExamController::class, 'previewAttempt'])
+    ->name('admin.attempt.preview');

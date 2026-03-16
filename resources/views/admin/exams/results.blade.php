@@ -121,25 +121,41 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            @if($attempt->status === 'submitted')
-                                <a href="{{ route('admin.attempt.grade', $attempt->id) }}" 
-                                   class="text-blue-600 hover:text-blue-800 font-semibold">
-                                    Grade Now
-                                </a>
-                            @elseif($attempt->status === 'graded')
-                                <div class="flex gap-2">
-                                    <a href="{{ route('admin.attempt.print', $attempt->id) }}" 
-                                       class="text-purple-600 hover:text-purple-800" title="Print Script">
-                                        🖨️
-                                    </a>
+                            <div class="flex gap-3 items-center">
+                                @if($attempt->status === 'in_progress')
+                                    <!-- Submit For Student Button -->
+                                    <form method="POST" 
+                                          action="{{ route('admin.submit-for-student', $attempt->id) }}" 
+                                          onsubmit="return confirm('⚠️ Submit exam for {{ $attempt->user->name }}?\n\nThis will:\n✓ Mark exam as completed\n✓ Auto-grade MCQ/Fill-blank\n✓ Stop the timer\n\nCannot be undone!')"
+                                          class="inline">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                            ✓ Submit
+                                        </button>
+                                    </form>
                                     <a href="{{ route('admin.attempt.grade', $attempt->id) }}" 
-                                       class="text-green-600 hover:text-green-800" title="View/Edit">
-                                        👁️
+                                       class="text-gray-400 hover:text-gray-600 text-xs" title="View Progress">
+                                        👁️ View
                                     </a>
-                                </div>
-                            @else
-                                <span class="text-gray-400">Waiting</span>
-                            @endif
+                                @elseif($attempt->status === 'submitted')
+                                    <a href="{{ route('admin.attempt.grade', $attempt->id) }}" 
+                                       class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold">
+                                        📝 Grade Now
+                                    </a>
+                                @elseif($attempt->status === 'graded')
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('admin.attempt.print', $attempt->id) }}" 
+                                           class="text-purple-600 hover:text-purple-800 text-lg" title="Print Script">
+                                            🖨️
+                                        </a>
+                                        <a href="{{ route('admin.attempt.grade', $attempt->id) }}" 
+                                           class="text-green-600 hover:text-green-800 text-lg" title="View/Edit">
+                                            👁️
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty

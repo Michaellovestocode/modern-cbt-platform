@@ -4,6 +4,33 @@
 
 @section('content')
 <div class="space-y-6">
+    <!-- Add this warning box for in-progress exams -->
+    @if($attempt->status === 'in_progress')
+    <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-yellow-800 flex items-center gap-2">
+                    <span class="text-2xl">⚠️</span> Exam Still In Progress
+                </h3>
+                <p class="text-sm text-yellow-700 mt-1">
+                    This student (<strong>{{ $attempt->student->name }}</strong>) hasn't submitted yet. 
+                    You can submit it on their behalf if needed.
+                </p>
+            </div>
+            <form method="POST" 
+                  action="{{ route('admin.submit-for-student', $attempt->id) }}" 
+                  onsubmit="return confirm('⚠️ Submit this exam for {{ $attempt->student->name }}?\n\nThis will:\n✓ Mark exam as completed\n✓ Auto-grade MCQ/Fill-blank questions\n✓ Stop the timer\n\nThis action cannot be undone!')">
+                @csrf
+                <button type="submit" 
+                        class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg font-bold shadow-lg transition">
+                    📝 Submit For Student
+                </button>
+            </form>
+        </div>
+    </div>
+    @endif
+
+    <!-- Rest of your existing grading page content continues here -->
     <!-- Header -->
     <div class="bg-white rounded-lg shadow p-6">
         <div class="flex justify-between items-center mb-4">
