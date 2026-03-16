@@ -45,6 +45,10 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
+# Copy and set permissions for entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80
 
-CMD sh -c "php artisan migrate --force; php artisan db:seed --force; php artisan storage:link; apache2-foreground"
+ENTRYPOINT ["docker-entrypoint.sh"]
