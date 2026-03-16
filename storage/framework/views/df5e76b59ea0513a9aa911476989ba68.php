@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Student Dashboard')
 
-@section('content')
+<?php $__env->startSection('title', 'Student Dashboard'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="space-y-6">
     <!-- Welcome Header with Background -->
     <div class="relative bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 rounded-3xl shadow-2xl overflow-hidden">
@@ -13,28 +13,30 @@
         <div class="relative p-8 text-white">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h1 class="text-4xl font-bold mb-2">Welcome back, {{ auth()->user()->name }}! 👋</h1>
+                    <h1 class="text-4xl font-bold mb-2">Welcome back, <?php echo e(auth()->user()->name); ?>! 👋</h1>
                     <div class="flex items-center gap-4 flex-wrap mt-3">
                         <p class="text-white/90 text-lg flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
                             </svg>
-                            {{ auth()->user()->registration_number }}
+                            <?php echo e(auth()->user()->registration_number); ?>
+
                         </p>
                         <p class="text-white/90 text-lg flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
-                            {{ auth()->user()->class->name ?? 'N/A' }}
+                            <?php echo e(auth()->user()->class->name ?? 'N/A'); ?>
+
                         </p>
                     </div>
                     <p class="text-white/70 text-sm mt-3 italic">"My school is a place of light, where dreams are shaped both day and night"</p>
                 </div>
                 <div class="bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30">
                     <div class="text-center">
-                        <div class="text-5xl font-bold">{{ \Carbon\Carbon::now()->format('d') }}</div>
-                        <div class="text-sm mt-1">{{ \Carbon\Carbon::now()->format('F Y') }}</div>
-                        <div class="text-xs mt-2 opacity-80">{{ \Carbon\Carbon::now()->format('l') }}</div>
+                        <div class="text-5xl font-bold"><?php echo e(\Carbon\Carbon::now()->format('d')); ?></div>
+                        <div class="text-sm mt-1"><?php echo e(\Carbon\Carbon::now()->format('F Y')); ?></div>
+                        <div class="text-xs mt-2 opacity-80"><?php echo e(\Carbon\Carbon::now()->format('l')); ?></div>
                     </div>
                 </div>
             </div>
@@ -42,7 +44,7 @@
     </div>
 
     <!-- In Progress Exams Warning -->
-    @if($inProgressAttempts->count() > 0)
+    <?php if($inProgressAttempts->count() > 0): ?>
     <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl shadow-lg p-6 text-white">
         <div class="flex items-center mb-4">
             <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 mr-4">
@@ -56,21 +58,21 @@
             </div>
         </div>
         <div class="space-y-3">
-            @foreach($inProgressAttempts as $attempt)
+            <?php $__currentLoopData = $inProgressAttempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 flex justify-between items-center">
                 <div>
-                    <p class="font-bold text-lg">{{ $attempt->exam->title }}</p>
-                    <p class="text-white/80 text-sm">Started: {{ $attempt->started_at->format('d M Y, h:i A') }}</p>
+                    <p class="font-bold text-lg"><?php echo e($attempt->exam->title); ?></p>
+                    <p class="text-white/80 text-sm">Started: <?php echo e($attempt->started_at->format('d M Y, h:i A')); ?></p>
                 </div>
-                <a href="{{ route('student.take-exam', $attempt->id) }}" 
+                <a href="<?php echo e(route('student.take-exam', $attempt->id)); ?>" 
                    class="bg-white text-orange-600 hover:bg-orange-50 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap">
                     Continue Exam →
                 </a>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -83,7 +85,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $availableExams->count() }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($availableExams->count()); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Available Exams</div>
@@ -99,7 +101,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $completedAttempts->count() }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($completedAttempts->count()); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Completed</div>
@@ -115,7 +117,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $inProgressAttempts->count() }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($inProgressAttempts->count()); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">In Progress</div>
@@ -131,54 +133,55 @@
             </h3>
         </div>
         <div class="p-6">
-            @forelse($availableExams as $exam)
+            <?php $__empty_1 = true; $__currentLoopData = $availableExams; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $exam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="border-2 border-gray-100 hover:border-blue-300 rounded-2xl p-6 mb-4 hover:shadow-lg transition-all">
                 <div class="flex justify-between items-start mb-4">
                     <div class="flex-1">
-                        <h4 class="text-2xl font-bold text-gray-800 mb-2">{{ $exam->title }}</h4>
-                        <p class="text-gray-600 text-sm">{{ $exam->description }}</p>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-2"><?php echo e($exam->title); ?></h4>
+                        <p class="text-gray-600 text-sm"><?php echo e($exam->description); ?></p>
                     </div>
-                    <span class="bg-green-100 text-green-800 text-xs font-bold px-4 py-2 rounded-full">{{ $exam->subject }}</span>
+                    <span class="bg-green-100 text-green-800 text-xs font-bold px-4 py-2 rounded-full"><?php echo e($exam->subject); ?></span>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div class="bg-blue-50 rounded-xl p-3">
                         <div class="text-xs text-gray-600 mb-1">⏱️ Duration</div>
-                        <div class="font-bold text-gray-800">{{ $exam->duration_minutes }} mins</div>
+                        <div class="font-bold text-gray-800"><?php echo e($exam->duration_minutes); ?> mins</div>
                     </div>
                     <div class="bg-purple-50 rounded-xl p-3">
                         <div class="text-xs text-gray-600 mb-1">📊 Total Marks</div>
-                        <div class="font-bold text-gray-800">{{ $exam->total_marks }}</div>
+                        <div class="font-bold text-gray-800"><?php echo e($exam->total_marks); ?></div>
                     </div>
                     <div class="bg-green-50 rounded-xl p-3">
                         <div class="text-xs text-gray-600 mb-1">✓ Pass Mark</div>
-                        <div class="font-bold text-gray-800">{{ $exam->pass_mark }}</div>
+                        <div class="font-bold text-gray-800"><?php echo e($exam->pass_mark); ?></div>
                     </div>
                     <div class="bg-yellow-50 rounded-xl p-3">
                         <div class="text-xs text-gray-600 mb-1">📝 Questions</div>
-                        <div class="font-bold text-gray-800">{{ $exam->questions->count() }}</div>
+                        <div class="font-bold text-gray-800"><?php echo e($exam->questions->count()); ?></div>
                     </div>
                 </div>
 
-                @if($exam->instructions)
+                <?php if($exam->instructions): ?>
                 <div class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-4">
                     <p class="text-sm text-gray-700 flex items-start">
                         <svg class="w-5 h-5 mr-2 flex-shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span><strong>Instructions:</strong> {{ $exam->instructions }}</span>
+                        <span><strong>Instructions:</strong> <?php echo e($exam->instructions); ?></span>
                     </p>
                 </div>
-                @endif
+                <?php endif; ?>
 
                 <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                     <div class="text-sm text-gray-600 flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        Available until: {{ $exam->end_date->format('d M Y') }}
+                        Available until: <?php echo e($exam->end_date->format('d M Y')); ?>
+
                     </div>
-                    <a href="{{ route('student.start-exam', $exam->id) }}" 
+                    <a href="<?php echo e(route('student.start-exam', $exam->id)); ?>" 
                        class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center">
                         Start Exam
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,13 +190,13 @@
                     </a>
                 </div>
             </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="text-center py-16">
                 <div class="text-7xl mb-4">📭</div>
                 <p class="text-gray-500 text-xl font-semibold">No exams available at the moment</p>
                 <p class="text-gray-400 text-sm mt-2">Check back later for new assessments</p>
             </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 
@@ -205,30 +208,32 @@
             </h3>
         </div>
         <div class="p-6">
-            @forelse($completedAttempts as $attempt)
+            <?php $__empty_1 = true; $__currentLoopData = $completedAttempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="border-2 border-gray-100 hover:border-green-300 rounded-2xl p-5 mb-4 flex justify-between items-center hover:shadow-md transition-all">
                 <div class="flex-1">
-                    <h4 class="font-bold text-gray-800 text-lg mb-2">{{ $attempt->exam->title }}</h4>
+                    <h4 class="font-bold text-gray-800 text-lg mb-2"><?php echo e($attempt->exam->title); ?></h4>
                     <div class="flex items-center gap-4 flex-wrap">
                         <p class="text-sm text-gray-600 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
-                            Submitted: {{ $attempt->submitted_at->format('d M Y, h:i A') }}
+                            Submitted: <?php echo e($attempt->submitted_at->format('d M Y, h:i A')); ?>
+
                         </p>
-                        @if($attempt->isGraded())
+                        <?php if($attempt->isGraded()): ?>
                         <div class="flex items-center">
                             <span class="text-sm font-semibold text-gray-700 mr-2">Score:</span>
-                            <span class="text-2xl font-bold px-4 py-1 rounded-lg {{ $attempt->total_score >= $attempt->exam->pass_mark ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                {{ $attempt->total_score }}/{{ $attempt->exam->total_marks }}
+                            <span class="text-2xl font-bold px-4 py-1 rounded-lg <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'); ?>">
+                                <?php echo e($attempt->total_score); ?>/<?php echo e($attempt->exam->total_marks); ?>
+
                             </span>
                         </div>
-                        @else
+                        <?php else: ?>
                         <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">⏳ Pending Grading</span>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
-                <a href="{{ route('student.view-result', $attempt->id) }}" 
+                <a href="<?php echo e(route('student.view-result', $attempt->id)); ?>" 
                    class="ml-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap flex items-center">
                     View Details
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,14 +242,15 @@
                     </svg>
                 </a>
             </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="text-center py-16">
                 <div class="text-7xl mb-4">📊</div>
                 <p class="text-gray-500 text-xl font-semibold">No completed exams yet</p>
                 <p class="text-gray-400 text-sm mt-2">Your exam results will appear here after submission</p>
             </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\modern-cbt-platform-for-highschool\resources\views/student/dashboard.blade.php ENDPATH**/ ?>

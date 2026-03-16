@@ -37,17 +37,17 @@
                 <p class="text-gray-600">Cambridge International School Examination Portal</p>
             </div>
 
-            @if($errors->any())
+            <?php if($errors->any()): ?>
                 <div class="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-xl mb-6 shadow-sm">
                     <div class="flex items-center">
                         <span class="text-xl mr-2">⚠️</span>
-                        <span class="font-medium">{{ $errors->first() }}</span>
+                        <span class="font-medium"><?php echo e($errors->first()); ?></span>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
-                @csrf
+            <form action="<?php echo e(route('login.post')); ?>" method="POST" class="space-y-6">
+                <?php echo csrf_field(); ?>
                 
                 <div>
                     <label for="identifier" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -57,7 +57,7 @@
                         type="text" 
                         id="identifier" 
                         name="identifier" 
-                        value="{{ old('identifier') }}"
+                        value="<?php echo e(old('identifier')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all outline-none"
                         placeholder="Enter email or registration number"
                         required
@@ -118,4 +118,4 @@
         </div>
     </div>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\modern-cbt-platform-for-highschool\resources\views/auth/login.blade.php ENDPATH**/ ?>

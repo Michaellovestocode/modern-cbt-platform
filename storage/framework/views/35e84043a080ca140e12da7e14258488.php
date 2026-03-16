@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
 
-@section('content')
+<?php $__env->startSection('title', 'Admin Dashboard'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="space-y-6">
     <!-- Welcome Header with Background -->
     <div class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl overflow-hidden">
@@ -13,15 +13,15 @@
         <div class="relative p-8 text-white">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h1 class="text-4xl font-bold mb-2">Welcome, {{ Auth::user()->name }}! 👨‍💼</h1>
+                    <h1 class="text-4xl font-bold mb-2">Welcome, <?php echo e(Auth::user()->name); ?>! 👨‍💼</h1>
                     <p class="text-white/90 text-lg">Administrator Dashboard</p>
                     <p class="text-white/70 text-sm mt-2 italic">Cambridge International School - CBT System</p>
                 </div>
                 <div class="bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30">
                     <div class="text-center">
-                        <div class="text-5xl font-bold">{{ \Carbon\Carbon::now()->format('d') }}</div>
-                        <div class="text-sm mt-1">{{ \Carbon\Carbon::now()->format('F Y') }}</div>
-                        <div class="text-xs mt-2 opacity-80">{{ \Carbon\Carbon::now()->format('l') }}</div>
+                        <div class="text-5xl font-bold"><?php echo e(\Carbon\Carbon::now()->format('d')); ?></div>
+                        <div class="text-sm mt-1"><?php echo e(\Carbon\Carbon::now()->format('F Y')); ?></div>
+                        <div class="text-xs mt-2 opacity-80"><?php echo e(\Carbon\Carbon::now()->format('l')); ?></div>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $examsCount }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($examsCount); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Total Exams</div>
@@ -55,7 +55,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $studentsCount }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($studentsCount); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Total Students</div>
@@ -71,7 +71,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold">{{ $recentAttempts->count() }}</div>
+                    <div class="text-4xl font-bold"><?php echo e($recentAttempts->count()); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Recent Attempts</div>
@@ -89,7 +89,7 @@
                 </h3>
             </div>
             <div class="p-6 space-y-3">
-                <a href="{{ route('admin.exam.create') }}" 
+                <a href="<?php echo e(route('admin.exam.create')); ?>" 
                    class="flex items-center justify-between bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
                     <span class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +102,7 @@
                     </svg>
                 </a>
 
-                <a href="{{ route('admin.exams') }}" 
+                <a href="<?php echo e(route('admin.exams')); ?>" 
                    class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
                     <span class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,8 +115,8 @@
                     </svg>
                 </a>
 
-                @if(auth()->user()->isAdmin())
-                <a href="{{ route('admin.students') }}" 
+                <?php if(auth()->user()->isAdmin()): ?>
+                <a href="<?php echo e(route('admin.students')); ?>" 
                    class="flex items-center justify-between bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
                     <span class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@
                     </svg>
                 </a>
 
-                <a href="{{ route('admin.teachers') }}" 
+                <a href="<?php echo e(route('admin.teachers')); ?>" 
                    class="flex items-center justify-between bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
                     <span class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +142,7 @@
                     </svg>
                 </a>
 
-                <a href="{{ route('admin.classes') }}" 
+                <a href="<?php echo e(route('admin.classes')); ?>" 
                    class="flex items-center justify-between bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
                     <span class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,7 +154,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
@@ -166,27 +166,28 @@
                 </h3>
             </div>
             <div class="p-6">
-                @forelse($recentExams as $exam)
+                <?php $__empty_1 = true; $__currentLoopData = $recentExams; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $exam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="border-l-4 border-green-500 bg-green-50 rounded-r-xl pl-4 py-3 mb-3 hover:bg-green-100 transition-colors">
-                    <p class="font-bold text-gray-800">{{ $exam->title }}</p>
+                    <p class="font-bold text-gray-800"><?php echo e($exam->title); ?></p>
                     <div class="flex items-center gap-2 mt-2 flex-wrap">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-semibold">
-                            {{ $exam->subject }}
+                            <?php echo e($exam->subject); ?>
+
                         </span>
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">
-                            📝 {{ $exam->questions->count() }} questions
+                            📝 <?php echo e($exam->questions->count()); ?> questions
                         </span>
                     </div>
                 </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="text-center py-12">
                     <div class="text-5xl mb-3">📭</div>
                     <p class="text-gray-500">No exams yet</p>
-                    <a href="{{ route('admin.exam.create') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm mt-2 inline-block">
+                    <a href="<?php echo e(route('admin.exam.create')); ?>" class="text-green-600 hover:text-green-700 font-semibold text-sm mt-2 inline-block">
                         Create your first exam →
                     </a>
                 </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -211,54 +212,55 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($recentAttempts as $attempt)
+                    <?php $__empty_1 = true; $__currentLoopData = $recentAttempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="font-semibold text-gray-800">{{ $attempt->user->name }}</div>
-                            <div class="text-xs text-gray-500">{{ $attempt->user->registration_number }}</div>
+                            <div class="font-semibold text-gray-800"><?php echo e($attempt->user->name); ?></div>
+                            <div class="text-xs text-gray-500"><?php echo e($attempt->user->registration_number); ?></div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="font-medium text-gray-800">{{ $attempt->exam->title }}</div>
-                            <div class="text-xs text-gray-500">{{ $attempt->exam->subject }}</div>
+                            <div class="font-medium text-gray-800"><?php echo e($attempt->exam->title); ?></div>
+                            <div class="text-xs text-gray-500"><?php echo e($attempt->exam->subject); ?></div>
                         </td>
                         <td class="px-6 py-4">
-                            @if($attempt->status === 'graded')
+                            <?php if($attempt->status === 'graded'): ?>
                             <span class="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-semibold">✓ Graded</span>
-                            @elseif($attempt->status === 'submitted')
+                            <?php elseif($attempt->status === 'submitted'): ?>
                             <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-semibold">⏳ Pending</span>
-                            @else
+                            <?php else: ?>
                             <span class="px-3 py-1 bg-gray-100 text-gray-800 text-xs rounded-full font-semibold">⚪ In Progress</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($attempt->total_score !== null)
-                            <span class="font-bold text-gray-800">{{ $attempt->total_score }}</span>
-                            @else
+                            <?php if($attempt->total_score !== null): ?>
+                            <span class="font-bold text-gray-800"><?php echo e($attempt->total_score); ?></span>
+                            <?php else: ?>
                             <span class="text-gray-400">-</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $attempt->created_at->format('d M Y') }}
-                            <div class="text-xs text-gray-400">{{ $attempt->created_at->format('H:i') }}</div>
+                            <?php echo e($attempt->created_at->format('d M Y')); ?>
+
+                            <div class="text-xs text-gray-400"><?php echo e($attempt->created_at->format('H:i')); ?></div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($attempt->status === 'submitted')
-                            <a href="{{ route('admin.attempt.grade', $attempt->id) }}" 
+                            <?php if($attempt->status === 'submitted'): ?>
+                            <a href="<?php echo e(route('admin.attempt.grade', $attempt->id)); ?>" 
                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold inline-flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
                                 Grade
                             </a>
-                            @else
-                            <a href="{{ route('admin.exam.results', $attempt->exam_id) }}" 
+                            <?php else: ?>
+                            <a href="<?php echo e(route('admin.exam.results', $attempt->exam_id)); ?>" 
                                class="text-gray-600 hover:text-gray-800 font-semibold text-sm">
                                 View →
                             </a>
-                            @endif
+                            <?php endif; ?>
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center">
                             <div class="text-5xl mb-3">📝</div>
@@ -266,10 +268,11 @@
                             <p class="text-gray-400 text-sm mt-1">Student submissions will appear here</p>
                         </td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\modern-cbt-platform-for-highschool\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

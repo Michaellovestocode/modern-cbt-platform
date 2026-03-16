@@ -1,15 +1,15 @@
-@extends('layouts.app')
 
-@section('title', 'Take Exam')
 
-@section('content')
+<?php $__env->startSection('title', 'Take Exam'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div x-data="examApp()" x-init="init()" class="space-y-6">
     <!-- Timer and Header -->
     <div class="bg-white rounded-lg shadow p-6">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-bold text-gray-800">{{ $attempt->exam->title }}</h2>
-                <p class="text-gray-600">{{ $attempt->exam->subject }}</p>
+                <h2 class="text-2xl font-bold text-gray-800"><?php echo e($attempt->exam->title); ?></h2>
+                <p class="text-gray-600"><?php echo e($attempt->exam->subject); ?></p>
             </div>
             <div class="text-center">
                 <div class="text-3xl font-bold" :class="timeRemaining < 300 ? 'text-red-600' : 'text-green-600'">
@@ -22,131 +22,109 @@
 
     <!-- Questions -->
     <form id="exam-form" @submit.prevent="submitExam">
-        @csrf
+        <?php echo csrf_field(); ?>
         <div class="bg-white rounded-lg shadow p-6 space-y-8">
-            @foreach($questions as $index => $question)
-            <div class="border-b pb-6 last:border-b-0" id="question-{{ $question->id }}">
+            <?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $question): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="border-b pb-6 last:border-b-0" id="question-<?php echo e($question->id); ?>">
                 <div class="flex items-start mb-4">
                     <span class="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-semibold mr-3 flex-shrink-0">
-                        {{ $index + 1 }}
+                        <?php echo e($index + 1); ?>
+
                     </span>
                     <div class="flex-1">
-                        <p class="text-gray-800 font-medium mb-2">{{ $question->question_text }}</p>
+                        <p class="text-gray-800 font-medium mb-2"><?php echo e($question->question_text); ?></p>
                         <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                            {{ $question->marks }} marks
+                            <?php echo e($question->marks); ?> marks
                         </span>
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded ml-2">
-                            {{ ucwords(str_replace('_', ' ', $question->question_type)) }}
+                            <?php echo e(ucwords(str_replace('_', ' ', $question->question_type))); ?>
+
                         </span>
                     </div>
                 </div>
 
-                @php
+                <?php
                     $savedAnswer = $attempt->answers->where('question_id', $question->id)->first();
-                @endphp
+                ?>
 
                 <div class="ml-11">
-                    @if($question->image_path)
-                    <div class="mb-6 border rounded-lg overflow-hidden" x-data="{ zoomed: false }">
-                        <div class="bg-blue-50 px-4 py-2 border-b flex justify-between items-center">
-                            <span class="text-sm font-semibold text-blue-700">📸 Reference Image</span>
-                            <button type="button"
-                                    @click.stop.prevent="zoomed = !zoomed"
-                                    class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition">
-                                <span x-show="!zoomed">🔍 Zoom In</span>
-                                <span x-show="zoomed">✕ Close</span>
-                            </button>
-                        </div>
-                        
-                        <div x-show="!zoomed" class="p-4 bg-white">
-                            <img src="{{ asset('storage/' . $question->image_path) }}" 
-                                 alt="Reference design" 
-                                 onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3EImage not found%3C/text%3E%3C/svg%3E';"
-                                 class="max-h-64 mx-auto border rounded shadow-sm cursor-pointer hover:opacity-90 transition"
-                                 @click.stop.prevent="zoomed = true"
-                                 title="Click to zoom">
-                        </div>
+                   <?php if($question->image_path): ?>
+<div class="mb-6 border rounded-lg overflow-hidden" x-data="{ zoomed: false }">
+    <div class="bg-blue-50 px-4 py-2 border-b">
+        <span class="text-sm font-semibold text-blue-700">Reference Image</span>
+        <!-- DEBUG INFO -->
+        <div class="text-xs mt-2 bg-yellow-100 p-2 rounded">
+            <p><strong>Path in DB:</strong> <?php echo e($question->image_path); ?></p>
+            <p><strong>Full URL:</strong> <?php echo e(asset('storage/' . $question->image_path)); ?></p>
+            <p><strong>File exists:</strong> <?php echo e(file_exists(public_path('storage/' . $question->image_path)) ? 'YES ✓' : 'NO ✗'); ?></p>
+        </div>
+    </div>
+    
+    <div class="p-4 bg-white">
+        <img src="<?php echo e(asset('storage/' . $question->image_path)); ?>" 
+             alt="Reference" 
+             onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3EImage not found%3C/text%3E%3C/svg%3E';"
+             class="max-h-64 mx-auto border rounded">
+    </div>
+</div>
+<?php endif; ?>
 
-                        <template x-if="zoomed">
-                            <div @click.stop.prevent="zoomed = false"
-                                 @keydown.escape.window="zoomed = false"
-                                 class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4"
-                                 style="z-index: 99999;">
-                                <div class="relative max-w-7xl max-h-full" @click.stop>
-                                    <button type="button"
-                                            @click.stop.prevent="zoomed = false"
-                                            class="absolute -top-12 right-0 bg-white text-gray-800 rounded-lg px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100 transition">
-                                        ✕ Close (ESC)
-                                    </button>
-                                    
-                                    <img src="{{ asset('storage/' . $question->image_path) }}" 
-                                         alt="Reference design zoomed" 
-                                         class="max-w-full max-h-screen object-contain rounded-lg shadow-2xl border-4 border-white">
-                                    
-                                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2 text-sm rounded-b-lg">
-                                        Reference Design - Study this carefully and recreate it in your code
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                    @endif
-
-                    @if($question->question_type === 'multiple_choice')
+                    <?php if($question->question_type === 'multiple_choice'): ?>
                         <div class="space-y-2">
-                            @foreach($question->options as $key => $option)
+                            <?php $__currentLoopData = $question->options; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer">
                                 <input 
                                     type="radio" 
-                                    name="question_{{ $question->id }}" 
-                                    value="{{ $key }}"
-                                    {{ $savedAnswer && $savedAnswer->answer_text == $key ? 'checked' : '' }}
-                                    @change="saveAnswer({{ $question->id }}, $event.target.value)"
+                                    name="question_<?php echo e($question->id); ?>" 
+                                    value="<?php echo e($key); ?>"
+                                    <?php echo e($savedAnswer && $savedAnswer->answer_text == $key ? 'checked' : ''); ?>
+
+                                    @change="saveAnswer(<?php echo e($question->id); ?>, $event.target.value)"
                                     class="mr-3 h-4 w-4 text-green-600">
-                                <span><strong>{{ $key }}.</strong> {{ $option }}</span>
+                                <span><strong><?php echo e($key); ?>.</strong> <?php echo e($option); ?></span>
                             </label>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
 
-                    @elseif($question->question_type === 'fill_blank')
+                    <?php elseif($question->question_type === 'fill_blank'): ?>
                         <input 
                             type="text" 
-                            name="question_{{ $question->id }}"
-                            value="{{ $savedAnswer->answer_text ?? '' }}"
-                            @change="saveAnswer({{ $question->id }}, $event.target.value)"
+                            name="question_<?php echo e($question->id); ?>"
+                            value="<?php echo e($savedAnswer->answer_text ?? ''); ?>"
+                            @change="saveAnswer(<?php echo e($question->id); ?>, $event.target.value)"
                             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                             placeholder="Type your answer...">
 
-                    @elseif($question->question_type === 'theory')
+                    <?php elseif($question->question_type === 'theory'): ?>
                         <textarea 
-                            name="question_{{ $question->id }}"
+                            name="question_<?php echo e($question->id); ?>"
                             rows="8"
-                            @change="saveAnswer({{ $question->id }}, $event.target.value)"
+                            @change="saveAnswer(<?php echo e($question->id); ?>, $event.target.value)"
                             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                            placeholder="Write your answer...">{{ $savedAnswer->answer_text ?? '' }}</textarea>
+                            placeholder="Write your answer..."><?php echo e($savedAnswer->answer_text ?? ''); ?></textarea>
 
-                    @elseif($question->question_type === 'coding')
-                        <div x-data="{ showPreview: false }" data-question="{{ $question->id }}">
+                    <?php elseif($question->question_type === 'coding'): ?>
+                        <div x-data="{ showPreview: false }" data-question="<?php echo e($question->id); ?>">
                             <div class="bg-gray-900 p-2 rounded-t flex gap-2 flex-wrap items-center">
                                 <button type="button" 
-                                        onclick="switchFile({{ $question->id }}, 'index.html')"
+                                        onclick="switchFile(<?php echo e($question->id); ?>, 'index.html')"
                                         class="file-tab bg-green-600 text-white px-3 py-1 rounded text-xs">
                                     📄 HTML
                                 </button>
                                 <button type="button"
-                                        onclick="switchFile({{ $question->id }}, 'styles.css')"
+                                        onclick="switchFile(<?php echo e($question->id); ?>, 'styles.css')"
                                         class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">
                                     🎨 CSS
                                 </button>
                                 <button type="button"
-                                        onclick="switchFile({{ $question->id }}, 'script.js')"
+                                        onclick="switchFile(<?php echo e($question->id); ?>, 'script.js')"
                                         class="file-tab bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">
                                     ⚡ JS
                                 </button>
                                 
                                 <div class="ml-auto flex gap-2">
                                     <button type="button" 
-                                            @click.stop.prevent="showPreview = !showPreview"
+                                            @click="showPreview = !showPreview"
                                             class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded">
                                         <span x-show="!showPreview">👁️ Preview</span>
                                         <span x-show="showPreview">📝 Code</span>
@@ -157,33 +135,34 @@
                             <div class="grid" :class="showPreview ? 'grid-cols-2 gap-2' : 'grid-cols-1'">
                                 <div>
                                     <textarea 
-                                        id="code-editor-{{ $question->id }}"
-                                        name="question_{{ $question->id }}"
+                                        id="code-editor-<?php echo e($question->id); ?>"
+                                        name="question_<?php echo e($question->id); ?>"
                                         class="code-editor"
-                                        data-question-id="{{ $question->id }}">{{ $savedAnswer->answer_text ?? '' }}</textarea>
+                                        data-question-id="<?php echo e($question->id); ?>"><?php echo e($savedAnswer->answer_text ?? ''); ?></textarea>
                                 </div>
 
                                 <div x-show="showPreview" class="border rounded overflow-hidden">
                                     <div class="bg-gray-100 p-2 border-b flex justify-between items-center">
                                         <span class="text-xs font-semibold">Preview</span>
                                         <button type="button" 
-                                                @click.stop.prevent="updatePreview({{ $question->id }})"
+                                                @click="updatePreview(<?php echo e($question->id); ?>)"
                                                 class="text-xs bg-blue-500 text-white px-2 py-1 rounded">
                                             🔄
                                         </button>
                                     </div>
                                     <iframe 
-                                        id="preview-frame-{{ $question->id }}"
-                                        style="width:100%; height:350px; border:none; background:white;"
-                                        sandbox="allow-scripts allow-same-origin">
-                                    </iframe>
+    id="preview-frame-<?php echo e($question->id); ?>"
+    style="width:100%; height:350px; border:none; background:white;"
+    sandbox="allow-scripts allow-same-origin">
+</iframe>
+
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
         <div class="bg-white rounded-lg shadow p-6 mt-6">
@@ -204,8 +183,10 @@
     </form>
 </div>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 
@@ -217,15 +198,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/css-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/javascript-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/anyword-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
 
 <script>
+    CodeMirror.commands.insertTagPair = function(cm, tag) {
+    const cursor = cm.getCursor();
+    const closeTag = `</${tag}>`;
+    cm.replaceSelection(`<${tag}>${closeTag}`);
+    cm.setCursor({ line: cursor.line, ch: cursor.ch + tag.length + 2 });
+};
+
 let editors = {};
 let projectFiles = {};
 
-// Enhanced CSS autocomplete
+// Enhanced CSS autocomplete with colors and values
 CodeMirror.registerHelper("hint", "css", function(editor) {
     const cur = editor.getCursor();
     const token = editor.getTokenAt(cur);
@@ -235,14 +227,9 @@ CodeMirror.registerHelper("hint", "css", function(editor) {
 
     const propertyHints = [
         "background", "background-color", "background-image", "background-position", "background-size",
-        "color", "border", "border-radius", "border-width", "border-style", "border-color",
-        "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
-        "padding", "padding-top", "padding-right", "padding-bottom", "padding-left",
-        "width", "height", "max-width", "max-height", "min-width", "min-height",
-        "display", "flex", "flex-direction", "justify-content", "align-items",
-        "grid", "position", "top", "left", "right", "bottom",
-        "font-size", "font-family", "font-weight", "font-style",
-        "text-align", "text-decoration", "line-height", "opacity"
+        "color", "border", "border-radius", "margin", "padding", "width", "height",
+        "display", "flex", "grid", "position", "top", "left", "right", "bottom",
+        "font-size", "font-family", "font-weight", "text-align", "line-height"
     ];
 
     const colorValues = [
@@ -259,6 +246,7 @@ CodeMirror.registerHelper("hint", "css", function(editor) {
     const line = editor.getLine(cur.line);
     const colonIndex = line.lastIndexOf(':', cur.ch);
     
+    // After colon - suggest values
     if (colonIndex > -1 && colonIndex < cur.ch) {
         const property = line.substring(0, colonIndex).trim().split(/\s+/).pop();
         let values = [];
@@ -282,6 +270,7 @@ CodeMirror.registerHelper("hint", "css", function(editor) {
         };
     }
     
+    // Before colon - suggest properties
     return {
         list: propertyHints.map(p => p + ': '),
         from: CodeMirror.Pos(cur.line, token.start),
@@ -291,29 +280,19 @@ CodeMirror.registerHelper("hint", "css", function(editor) {
 
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-            e.preventDefault();
-            alert("Use the autosave or submit button — Ctrl+S is disabled!");
-        }
-    });
-
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        alert("Use the autosave or submit button — Ctrl+S is disabled!");
+    }
+});
     document.querySelectorAll('.code-editor').forEach(function(textarea) {
         const qId = textarea.dataset.questionId;
         
-        let savedData = textarea.value;
-        try {
-            projectFiles[qId] = savedData ? JSON.parse(savedData) : null;
-        } catch(e) {
-            projectFiles[qId] = null;
-        }
-
-        if (!projectFiles[qId]) {
-            projectFiles[qId] = {
-                'index.html': savedData || '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Website</title>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n  \n</body>\n</html>',
-                'styles.css': '',
-                'script.js': '// JavaScript\nconsole.log("Ready!");'
-            };
-        }
+        projectFiles[qId] = {
+            'index.html': textarea.value || '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Website</title>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <script src="script.js"><\/script>\n</body>\n</html>',
+        'styles.css': '',
+            'script.js': '// Your JavaScript here\nconsole.log("Ready!");'
+        };
         
         const editor = CodeMirror.fromTextArea(textarea, {
             mode: 'htmlmixed',
@@ -322,22 +301,27 @@ document.addEventListener('DOMContentLoaded', function() {
             autoCloseBrackets: true,
             autoCloseTags: true,
             matchBrackets: true,
+            matchTags: true,
             lineWrapping: true,
             indentUnit: 2,
             tabSize: 2,
             extraKeys: {
                 "Ctrl-Space": "autocomplete",
-                "'<'": function(cm) {
-                    if (cm.getMode().name === "htmlmixed") {
-                        cm.replaceSelection("<");
-                        setTimeout(() => {
-                            CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
-                        }, 50);
-                    } else {
-                        cm.replaceSelection("<");
-                    }
-                },
+            "'<'": function(cm) {
+    if (cm.getMode().name === "htmlmixed") {
+        cm.replaceSelection("<");
+        setTimeout(() => {
+            CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+            });
+        }, 50);
+    } else {
+        cm.replaceSelection("<");
+    }
+},
+
                 "':'": function(cm) {
+                    // Auto-trigger for CSS properties
                     if (cm.getMode().name === 'css') {
                         cm.replaceSelection(": ");
                         setTimeout(() => CodeMirror.commands.autocomplete(cm), 50);
@@ -365,49 +349,65 @@ document.addEventListener('DOMContentLoaded', function() {
         let previewTimeout;
         editor.on('change', function() {
             const code = editor.getValue();
+            textarea.value = code;
             projectFiles[qId][editors[qId].currentFile] = code;
-            textarea.value = JSON.stringify(projectFiles[qId]);
             
+            // Auto-update preview
             clearTimeout(previewTimeout);
             previewTimeout = setTimeout(() => updatePreview(qId), 1000);
         });
         
+        // Enhanced autocomplete
         editor.on('inputRead', function(cm, change) {
             if (!cm.state.completionActive) {
                 const char = change.text[0];
                 const mode = cm.getMode().name;
                 
+                // HTML: trigger on < or letter after 
                 if (mode === "htmlmixed") {
-                    const cursor = cm.getCursor();
-                    const token = cm.getTokenAt(cursor);
-                    if (token.string.startsWith("<") && /<[a-zA-Z0-9-]*$/.test(token.string)) {
-                        CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
-                    }
-                }
+    const cursor = cm.getCursor();
+    const token = cm.getTokenAt(cursor);
+
+    if (token.string.startsWith("<") && /<[a-zA-Z0-9-]*$/.test(token.string)) {
+        CodeMirror.commands.autocomplete(cm, null, {
+            completeSingle: false
+        });
+    }
+}
                 
+                // CSS: trigger on letters
                 if (mode === 'css' && char && char.match(/[a-zA-Z-]/)) {
                     CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
                 }
                 
+                // JavaScript: trigger on letters and dot
                 if (mode === 'javascript' && char && char.match(/[a-zA-Z.]/)) {
                     CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
                 }
             }
         });
         
+        // Initial preview
         setTimeout(() => updatePreview(qId), 500);
     });
 });
 
 function updatePreview(qId) {
     const frame = document.getElementById('preview-frame-' + qId);
-    if (!frame) return;
+    if (!frame) {
+        console.log('Preview frame not found for question', qId);
+        return;
+    }
     
     const files = projectFiles[qId];
-    if (!files) return;
+    if (!files) {
+        console.log('No files found for question', qId);
+        return;
+    }
     
     let html = files['index.html'] || '';
     
+    // Inject CSS inline
     if (files['styles.css']) {
         const cssTag = '<style>' + files['styles.css'] + '</style>';
         if (html.includes('</head>')) {
@@ -417,14 +417,18 @@ function updatePreview(qId) {
         }
     }
     
+    // Inject JS inline
     if (files['script.js']) {
-        const jsTag = '<script>' + files['script.js'] + '<\/script>';
-        if (html.includes('</body>')) {
-            html = html.replace('</body>', jsTag + '</body>');
-        } else {
-            html = html + jsTag;
-        }
+    const jsTag = '<script>' + files['script.js'] + '<\/script>';
+    if (html.includes('</body>')) {
+        html = html.replace('</body>', jsTag + '</body>');
+    } else {
+        html = html + jsTag;
     }
+}
+
+    
+    console.log('Updating preview for question', qId);
     
     try {
         const doc = frame.contentDocument || frame.contentWindow.document;
@@ -440,15 +444,22 @@ function switchFile(qId, filename) {
     const obj = editors[qId];
     if (!obj) return;
     
+    // Save current file
     projectFiles[qId][obj.currentFile] = obj.editor.getValue();
-    document.getElementById('code-editor-' + qId).value = JSON.stringify(projectFiles[qId]);
     
+    // Switch to new file
     obj.currentFile = filename;
     obj.editor.setValue(projectFiles[qId][filename] || '');
     
-    const modes = { 'index.html': 'htmlmixed', 'styles.css': 'css', 'script.js': 'javascript' };
+    // Update mode
+    const modes = { 
+        'index.html': 'htmlmixed', 
+        'styles.css': 'css', 
+        'script.js': 'javascript' 
+    };
     obj.editor.setOption('mode', modes[filename]);
     
+    // Update active button
     document.querySelectorAll('[data-question="' + qId + '"] .file-tab').forEach(btn => {
         btn.classList.remove('bg-green-600', 'text-white');
         btn.classList.add('bg-gray-700', 'text-gray-300');
@@ -456,6 +467,7 @@ function switchFile(qId, filename) {
     event.target.classList.remove('bg-gray-700', 'text-gray-300');
     event.target.classList.add('bg-green-600', 'text-white');
     
+    // Refresh autocomplete for new mode
     setTimeout(() => {
         obj.editor.refresh();
         obj.editor.focus();
@@ -464,11 +476,12 @@ function switchFile(qId, filename) {
 
 function examApp() {
     return {
-        timeRemaining: {{ $attempt->time_remaining ?? ($attempt->exam->duration_minutes * 60) }},
+        timeRemaining: <?php echo e($attempt->time_remaining ?? ($attempt->exam->duration_minutes * 60)); ?>,
         timer: null,
         isSaving: false,
         isSubmitting: false,
         lastSaved: false,
+        timeExpired: false,
 
         init() {
             if (this.timeRemaining <= 0) {
@@ -516,11 +529,11 @@ function examApp() {
         async saveAnswer(qId, answer) {
             this.isSaving = true;
             try {
-                await fetch('{{ route("student.save-answer", $attempt->id) }}', {
+                await fetch('<?php echo e(route("student.save-answer", $attempt->id)); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                     },
                     body: JSON.stringify({
                         question_id: qId,
@@ -543,8 +556,8 @@ function examApp() {
             this.isSubmitting = true;
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '{{ route("student.submit-exam", $attempt->id) }}';
-            form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+            form.action = '<?php echo e(route("student.submit-exam", $attempt->id)); ?>';
+            form.innerHTML = '<input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">';
             document.body.appendChild(form);
             form.submit();
         }
@@ -571,8 +584,9 @@ function examApp() {
     background: #16a34a;
     color: white;
 }
-[x-cloak] { display: none !important; }
+[x-cloak] { display: none; }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\cbt-update\modern-cbt-platform-for-highschool\resources\views/student/take-exam.blade.php ENDPATH**/ ?>
