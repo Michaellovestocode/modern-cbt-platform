@@ -3,85 +3,87 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
-use Illuminate\Support\Facades\Artisan; 
 use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
-| Database Setup Route (TEMPORARY - Remove after first use)
+| Database Setup Route (TEMPORARY)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/setup-database', function() {
+    set_time_limit(300); // 5 minutes max
+    
+    $output = '';
+    
     try {
-        $output = "<style>
-            body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-            h1 { color: #10b981; }
-            h2 { color: #3b82f6; margin-top: 30px; }
-            pre { background: #f3f4f6; padding: 15px; border-radius: 8px; overflow-x: auto; }
-            .success { color: #10b981; font-weight: bold; }
-            .error { color: #ef4444; font-weight: bold; }
-            a { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #3b82f6; color: white; text-decoration: none; border-radius: 8px; }
-            a:hover { background: #2563eb; }
-        </style>";
-        
-        $output .= "<h1>🚀 Database Setup</h1>";
+        // Test database connection first
+        DB::connection()->getPdo();
+        $output .= "✅ Database connected successfully!<br><br>";
         
         // Run migrations
-        $output .= "<h2>📊 Running Migrations...</h2>";
+        $output .= "Running migrations...<br>";
         Artisan::call('migrate', ['--force' => true]);
-        $migrations = Artisan::output();
-        $output .= "<pre>{$migrations}</pre>";
+        $output .= "✅ Migrations complete!<br><br>";
         
-        // Run seeders
-        $output .= "<h2>🌱 Seeding Database...</h2>";
-        if (User::count() == 0) {
+        // Check if users exist
+        $userCount = User::count();
+        $output .= "Current users in database: {$userCount}<br><br>";
+        
+        // Run seeders only if no users
+        if ($userCount == 0) {
+            $output .= "Seeding database...<br>";
             Artisan::call('db:seed', ['--force' => true]);
-            $seeding = Artisan::output();
-            $output .= "<pre>{$seeding}</pre>";
-            $output .= "<p class='success'>✅ Database seeded successfully!</p>";
+            $output .= "✅ Seeding complete!<br><br>";
         } else {
-            $output .= "<p class='success'>ℹ️ Database already has users. Skipping seeders.</p>";
-            $output .= "<p>User count: " . User::count() . "</p>";
+            $output .= "⚠️ Users already exist. Skipping seeders.<br><br>";
         }
         
         // Storage link
-        $output .= "<h2>🔗 Creating Storage Link...</h2>";
         try {
             Artisan::call('storage:link');
-            $storage = Artisan::output();
-            $output .= "<pre>{$storage}</pre>";
+            $output .= "✅ Storage linked!<br><br>";
         } catch (\Exception $e) {
-            $output .= "<p class='success'>ℹ️ Storage link already exists.</p>";
+            $output .= "ℹ️ Storage link exists or not needed.<br><br>";
         }
         
-        // Clear cache
-        $output .= "<h2>🧹 Clearing Cache...</h2>";
-        Artisan::call('config:clear');
-        Artisan::call('cache:clear');
-        Artisan::call('view:clear');
-        $output .= "<p class='success'>✅ Cache cleared!</p>";
+        // Show credentials
+        $output .= "<h2>🔑 Demo Credentials:</h2>";
+        $output .= "<pre>Admin: admin@school.com / password</pre>";
+        $output .= "<pre>Teacher: okafor@school.com / password</pre>";
+        $output .= "<pre>Student: STD2024001 / password</pre><br>";
         
-        // Show demo credentials
-        $output .= "<h2>🔑 Demo Credentials</h2>";
-        $output .= "<pre>
-Admin:   admin@school.com / password
-Teacher: okafor@school.com / password  
-Student: STD2024001 / password
-        </pre>";
+        $output .= "<h1 style='color:green'>✅ Setup Complete!</h1>";
+        $output .= "<a href='/' style='background:#3b82f6;color:white;padding:10px 20px;text-decoration:none;border-radius:8px'>Go to Login</a>";
         
-        $output .= "<p class='success'>✅ Setup Complete!</p>";
-        $output .= "<a href='/'>Go to Login Page →</a>";
-        
-        return $output;
+        return "<html><body style='font-family:Arial;max-width:800px;margin:50px auto;padding:20px'>{$output}</body></html>";
         
     } catch (\Exception $e) {
-        return "<h1 class='error'>❌ Setup Failed</h1>
-                <pre>" . $e->getMessage() . "</pre>
-                <pre>" . $e->getTraceAsString() . "</pre>";
+        return "<html><body style='font-family:Arial;max-width:800px;margin:50px auto;padding:20px'>
+                <h1 style='color:red'>❌ Setup Failed</h1>
+                <p><strong>Error:</strong> " . $e->getMessage() . "</p>
+                <pre>" . $e->getTraceAsString() . "</pre>
+                </body></html>";
     }
 });
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Rest of your routes...
+
+
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
