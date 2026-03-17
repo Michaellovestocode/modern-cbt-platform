@@ -4,86 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Artisan;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-
-/*
-|--------------------------------------------------------------------------
-| Database Setup Route (TEMPORARY)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/setup-database', function() {
-    set_time_limit(300); // 5 minutes max
-    
-    $output = '';
-    
-    try {
-        // Test database connection first
-        DB::connection()->getPdo();
-        $output .= "✅ Database connected successfully!<br><br>";
-        
-        // Run migrations
-        $output .= "Running migrations...<br>";
-        Artisan::call('migrate', ['--force' => true]);
-        $output .= "✅ Migrations complete!<br><br>";
-        
-        // Check if users exist
-        $userCount = User::count();
-        $output .= "Current users in database: {$userCount}<br><br>";
-        
-        // Run seeders only if no users
-        if ($userCount == 0) {
-            $output .= "Seeding database...<br>";
-            Artisan::call('db:seed', ['--force' => true]);
-            $output .= "✅ Seeding complete!<br><br>";
-        } else {
-            $output .= "⚠️ Users already exist. Skipping seeders.<br><br>";
-        }
-        
-        // Storage link
-        try {
-            Artisan::call('storage:link');
-            $output .= "✅ Storage linked!<br><br>";
-        } catch (\Exception $e) {
-            $output .= "ℹ️ Storage link exists or not needed.<br><br>";
-        }
-        
-        // Show credentials
-        $output .= "<h2>🔑 Demo Credentials:</h2>";
-        $output .= "<pre>Admin: admin@school.com / password</pre>";
-        $output .= "<pre>Teacher: okafor@school.com / password</pre>";
-        $output .= "<pre>Student: STD2024001 / password</pre><br>";
-        
-        $output .= "<h1 style='color:green'>✅ Setup Complete!</h1>";
-        $output .= "<a href='/' style='background:#3b82f6;color:white;padding:10px 20px;text-decoration:none;border-radius:8px'>Go to Login</a>";
-        
-        return "<html><body style='font-family:Arial;max-width:800px;margin:50px auto;padding:20px'>{$output}</body></html>";
-        
-    } catch (\Exception $e) {
-        return "<html><body style='font-family:Arial;max-width:800px;margin:50px auto;padding:20px'>
-                <h1 style='color:red'>❌ Setup Failed</h1>
-                <p><strong>Error:</strong> " . $e->getMessage() . "</p>
-                <pre>" . $e->getTraceAsString() . "</pre>
-                </body></html>";
-    }
-});
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// Rest of your routes...
-
-
-
-
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -109,48 +29,44 @@ Route::middleware('auth')->group(function () {
         Route::post('/attempt/{attempt}/save', [StudentController::class, 'saveAnswer'])->name('save-answer');
         Route::post('/attempt/{attempt}/submit', [StudentController::class, 'submitExam'])->name('submit-exam');
         Route::get('/attempt/{attempt}/result', [StudentController::class, 'viewResult'])->name('view-result');
-        Route::get('/attempt/{attempt}/result', [StudentController::class, 'viewResult'])->name('view-result');
-Route::get('/attempt/{attempt}/download-pdf', [StudentController::class, 'downloadResultPDF'])->name('download-result-pdf');
-Route::get('/attempt/{attempt}/download-word', [StudentController::class, 'downloadResultWord'])->name('download-result-word');
+        Route::get('/attempt/{attempt}/download-pdf', [StudentController::class, 'downloadResultPDF'])->name('download-result-pdf');
+        Route::get('/attempt/{attempt}/download-word', [StudentController::class, 'downloadResultWord'])->name('download-result-word');
     });
 
     // Admin/Teacher routes
-    // Admin/Teacher routes
-Route::prefix('admin')->name('admin.')->middleware('role:admin,teacher')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    
-    // Teacher Management (Admin Only)
-    // Student Management (Admin Only)
-Route::middleware('role:admin')->group(function () {
-    Route::get('/teachers', [AdminController::class, 'teachers'])->name('teachers');
-    Route::get('/teachers/create', [AdminController::class, 'createTeacher'])->name('teacher.create');
-    Route::post('/teachers', [AdminController::class, 'storeTeacher'])->name('teacher.store');
-    Route::get('/teachers/{teacher}/edit', [AdminController::class, 'editTeacher'])->name('teacher.edit');
-    Route::put('/teachers/{teacher}', [AdminController::class, 'updateTeacher'])->name('teacher.update');
-    Route::delete('/teachers/{teacher}', [AdminController::class, 'deleteTeacher'])->name('teacher.delete');
-    
-    // Add these new student routes
-    Route::get('/students', [AdminController::class, 'students'])->name('students');
-    Route::get('/students/create', [AdminController::class, 'createStudent'])->name('student.create');
-    Route::post('/students', [AdminController::class, 'storeStudent'])->name('student.store');
-    Route::get('/students/{student}/edit', [AdminController::class, 'editStudent'])->name('student.edit');
-    Route::put('/students/{student}', [AdminController::class, 'updateStudent'])->name('student.update');
-    Route::delete('/students/{student}', [AdminController::class, 'deleteStudent'])->name('student.delete');
-    
-    // Class Management
-    Route::get('/classes', [AdminController::class, 'classes'])->name('classes');
-        Route::post('/classes', [AdminController::class, 'storeClass'])->name('class.store');
-        Route::delete('/classes/{class}', [AdminController::class, 'deleteClass'])->name('class.delete');
-    });
-    
-    // Exams (existing routes)
+    Route::prefix('admin')->name('admin.')->middleware('role:admin,teacher')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         
-        // Exams
+        // Admin-only routes
+        Route::middleware('role:admin')->group(function () {
+            // Teacher Management
+            Route::get('/teachers', [AdminController::class, 'teachers'])->name('teachers');
+            Route::get('/teachers/create', [AdminController::class, 'createTeacher'])->name('teacher.create');
+            Route::post('/teachers', [AdminController::class, 'storeTeacher'])->name('teacher.store');
+            Route::get('/teachers/{teacher}/edit', [AdminController::class, 'editTeacher'])->name('teacher.edit');
+            Route::put('/teachers/{teacher}', [AdminController::class, 'updateTeacher'])->name('teacher.update');
+            Route::delete('/teachers/{teacher}', [AdminController::class, 'deleteTeacher'])->name('teacher.delete');
+            
+            // Student Management
+            Route::get('/students', [AdminController::class, 'students'])->name('students');
+            Route::get('/students/create', [AdminController::class, 'createStudent'])->name('student.create');
+            Route::post('/students', [AdminController::class, 'storeStudent'])->name('student.store');
+            Route::get('/students/{student}/edit', [AdminController::class, 'editStudent'])->name('student.edit');
+            Route::put('/students/{student}', [AdminController::class, 'updateStudent'])->name('student.update');
+            Route::delete('/students/{student}', [AdminController::class, 'deleteStudent'])->name('student.delete');
+            
+            // Class Management
+            Route::get('/classes', [AdminController::class, 'classes'])->name('classes');
+            Route::post('/classes', [AdminController::class, 'storeClass'])->name('class.store');
+            Route::delete('/classes/{class}', [AdminController::class, 'deleteClass'])->name('class.delete');
+        });
+        
+        // Exams (accessible by admin and teachers)
         Route::get('/exams', [AdminController::class, 'exams'])->name('exams');
         Route::get('/exams/create', [AdminController::class, 'createExam'])->name('exam.create');
         Route::post('/exams', [AdminController::class, 'storeExam'])->name('exam.store');
         Route::get('/exams/{exam}/edit', [AdminController::class, 'editExam'])->name('exam.edit');
-Route::put('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exam.update');
+        Route::put('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exam.update');
         Route::get('/exams/{exam}/questions', [AdminController::class, 'examQuestions'])->name('exam.questions');
         Route::post('/exams/{exam}/questions', [AdminController::class, 'storeQuestion'])->name('exam.question.store');
         Route::delete('/questions/{question}', [AdminController::class, 'deleteQuestion'])->name('question.delete');
@@ -167,25 +83,5 @@ Route::put('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exam.
     });
 });
 
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::post('/admin/exams/{attempt}/submit-for-student', [AdminExamController::class, 'submitForStudent'])
-    ->name('admin.submit-for-student');
-
-    Route::get('/admin/exams/{attempt}/preview', [AdminExamController::class, 'previewAttempt'])
-    ->name('admin.attempt.preview');
-
-
-
-
-
-
-
-
-
-
-
-
-    
