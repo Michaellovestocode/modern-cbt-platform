@@ -4,21 +4,24 @@
 
 <?php $__env->startSection('content'); ?>
 <div x-data="examApp()" x-init="init()" class="space-y-6">
-    <!-- Timer and Header -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800"><?php echo e($attempt->exam->title); ?></h2>
-                <p class="text-gray-600"><?php echo e($attempt->exam->subject); ?></p>
+    <!-- Timer and Header (STICKY) -->
+<div class="sticky top-0 z-50 bg-white rounded-lg shadow-lg border-b-4 border-green-600 p-6 mb-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800"><?php echo e($attempt->exam->title); ?></h2>
+            <p class="text-gray-600"><?php echo e($attempt->exam->subject); ?></p>
+        </div>
+        <div class="text-center bg-gradient-to-br from-green-50 to-blue-50 border-2 rounded-xl px-6 py-3" :class="timeRemaining < 300 ? 'border-red-500 from-red-50 to-orange-50' : 'border-green-500'">
+            <div class="text-3xl font-bold" :class="timeRemaining < 300 ? 'text-red-600' : 'text-green-600'">
+                <span x-text="formatTime(timeRemaining)"></span>
             </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold" :class="timeRemaining < 300 ? 'text-red-600' : 'text-green-600'">
-                    <span x-text="formatTime(timeRemaining)"></span>
-                </div>
-                <div class="text-sm text-gray-600">Time Remaining</div>
+            <div class="text-sm font-semibold uppercase" :class="timeRemaining < 300 ? 'text-red-600' : 'text-gray-600'">
+                Time Remaining
             </div>
         </div>
     </div>
+</div>
+    
 
     <!-- Questions -->
     <form id="exam-form" @submit.prevent="submitExam">

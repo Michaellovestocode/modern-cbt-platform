@@ -31,16 +31,25 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <div class="bg-blue-50 p-4 rounded-lg">
                         <div class="text-sm text-gray-600">Objective Score</div>
-                        <div class="text-2xl font-bold text-blue-600">{{ $attempt->objective_score ?? 0 }}</div>
+                        <div class="text-2xl font-bold text-blue-600">
+                            {{ $attempt->objective_score ?? 0 }}<span class="text-lg text-blue-400">/{{ $objectiveTotal }}</span>
+                        </div>
                     </div>
                     <div class="bg-purple-50 p-4 rounded-lg">
                         <div class="text-sm text-gray-600">Subjective Score</div>
-                        <div class="text-2xl font-bold text-purple-600">{{ $attempt->subjective_score ?? 0 }}</div>
+                        <div class="text-2xl font-bold text-purple-600">
+                            {{ $attempt->subjective_score ?? 0 }}<span class="text-lg text-purple-400">/{{ $subjectiveTotal }}</span>
+                        </div>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <div class="text-sm text-gray-600">Percentage</div>
                         <div class="text-2xl font-bold text-gray-800">
-                            {{ round(($attempt->total_score / $attempt->exam->total_marks) * 100, 1) }}%
+                            @php
+                                $percentage = $attempt->exam->total_marks > 0 
+                                    ? round(($attempt->total_score / $attempt->exam->total_marks) * 100, 1) 
+                                    : 0;
+                            @endphp
+                            {{ $percentage }}%
                         </div>
                     </div>
                 </div>
@@ -99,19 +108,19 @@
                 </span>
                 <div class="flex-1">
                     <p class="text-gray-800 font-medium">{{ $question->question_text }}</p>
-                    <p class="text-gray-800 font-medium">{{ $question->question_text }}</p>
 
-<!-- Show reference image in results too -->
-@if($question->image_path)
-<div class="mt-3 border rounded-lg overflow-hidden">
-    <div class="bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Reference Image</div>
-    <div class="p-2 bg-white">
-        <img src="{{ $question->getImageUrl() }}" 
-             alt="Reference" 
-             class="max-h-40 object-contain border border-gray-200 rounded">
-    </div>
-</div>
-@endif
+                    <!-- Show reference image in results too -->
+                    @if($question->image_path)
+                    <div class="mt-3 border rounded-lg overflow-hidden">
+                        <div class="bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Reference Image</div>
+                        <div class="p-2 bg-white">
+                            <img src="{{ $question->getImageUrl() }}" 
+                                 alt="Reference" 
+                                 class="max-h-40 object-contain border border-gray-200 rounded">
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="mt-2 flex items-center gap-2 flex-wrap">
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
                             {{ ucwords(str_replace('_', ' ', $question->question_type)) }}
@@ -189,29 +198,28 @@
     @endif
 
     <!-- Action Buttons -->
-    <!-- Action Buttons -->
-<div class="bg-white rounded-lg shadow p-6">
-    <div class="flex flex-wrap gap-4 justify-center">
-        <a href="{{ route('student.dashboard') }}" 
-           class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            ← Back to Dashboard
-        </a>
-        @if($attempt->isGraded())
-        <button onclick="window.print()" 
-                class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            🖨️ Print Result
-        </button>
-        <a href="{{ route('student.download-result-pdf', $attempt->id) }}" 
-           class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            📄 Download PDF
-        </a>
-        <a href="{{ route('student.download-result-word', $attempt->id) }}" 
-           class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            📝 Download Word
-        </a>
-        @endif
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="{{ route('student.dashboard') }}" 
+               class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                ← Back to Dashboard
+            </a>
+            @if($attempt->isGraded())
+            <button onclick="window.print()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                🖨️ Print Result
+            </button>
+            <a href="{{ route('student.download-result-pdf', $attempt->id) }}" 
+               class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                📄 Download PDF
+            </a>
+            <a href="{{ route('student.download-result-word', $attempt->id) }}" 
+               class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                📝 Download Word
+            </a>
+            @endif
+        </div>
     </div>
-</div>
 </div>
 
 @push('styles')
