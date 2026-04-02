@@ -43,9 +43,19 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
-                    <input type="text" name="subject" value="{{ old('subject', $exam->subject) }}" 
+                    <select name="subject_id" 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                           placeholder="e.g., Mathematics, English" required>
+                           required>
+                        <option value="">-- Select a Subject --</option>
+                        @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}" {{ old('subject_id', $exam->subject_id) == $subject->id ? 'selected' : '' }}>
+                            {{ $subject->name }} ({{ $subject->code }})
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('subject_id')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>

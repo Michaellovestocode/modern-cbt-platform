@@ -25,7 +25,19 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
+
+    /**
+     * Get the post-authentication redirect path
+     */
+    protected function redirectPath()
+    {
+        $user = auth()->user();
+        if ($user->isStudent()) {
+            return route('student.dashboard');
+        }
+        return route('admin.dashboard');
+    }
 
     /**
      * Create a new controller instance.

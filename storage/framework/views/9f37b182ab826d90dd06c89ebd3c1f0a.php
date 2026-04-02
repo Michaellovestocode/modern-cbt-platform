@@ -61,14 +61,12 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
-            <div class="flex gap-3 mt-4">
-                <a href="<?php echo e(route('admin.exam.questions', $exam->id)); ?>"
-                <div class="flex gap-3 mt-4">
-    <a href="<?php echo e(route('admin.exam.edit', $exam->id)); ?>" 
-       class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">
-        ✏️ Edit Exam
-    </a>
-    <a href="<?php echo e(route('admin.exam.questions', $exam->id)); ?>" 
+            <div class="flex gap-2 mt-4 flex-wrap">
+                <a href="<?php echo e(route('admin.exam.edit', $exam->id)); ?>" 
+                   class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">
+                    ✏️ Edit Exam
+                </a>
+                <a href="<?php echo e(route('admin.exam.questions', $exam->id)); ?>" 
                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
                     Manage Questions
                 </a>
@@ -84,6 +82,13 @@
                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                     Export Word
                 </a>
+                <form method="POST" action="<?php echo e(route('admin.exam.delete', $exam->id)); ?>" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
+                    <button type="submit" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded">
+                        🗑️ Delete Exam
+                    </button>
+                </form>
             </div>
 
             <div class="text-sm text-gray-500 mt-3">

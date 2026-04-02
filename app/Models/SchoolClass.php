@@ -20,4 +20,14 @@ class SchoolClass extends Model
     {
         return $this->belongsToMany(Exam::class, 'exam_class', 'school_class_id', 'exam_id');
     }
+
+    public function formTeacher()
+    {
+        return $this->hasOne(FormTeacher::class, 'class_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'class_id');
+    }
 }

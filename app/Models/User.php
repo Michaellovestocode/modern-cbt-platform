@@ -58,7 +58,13 @@ class User extends Authenticatable
     }
 
     public function exams()
-{
-    return $this->hasMany(Exam::class, 'created_by');
-}
+    {
+        return $this->hasMany(Exam::class, 'created_by');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'teacher_subject', 'teacher_id', 'subject_id')
+                    ->withTimestamps();
+    }
 }

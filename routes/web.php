@@ -4,16 +4,32 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\FormTeacherController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/', function () {
+    // Redirect authenticated users to their dashboard
+    if (auth()->check()) {
+        $user = auth()->user();
+        
+        if ($user->isStudent()) {
+            return redirect()->route('student.dashboard');
+        } elseif ($user->isTeacher() || $user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+    }
+    
+    return view('welcome');
+});
 
-// Guest routes
 Route::middleware('guest')->group(function () {
-    Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
@@ -59,6 +75,27 @@ Route::middleware('auth')->group(function () {
             Route::get('/classes', [AdminController::class, 'classes'])->name('classes');
             Route::post('/classes', [AdminController::class, 'storeClass'])->name('class.store');
             Route::delete('/classes/{class}', [AdminController::class, 'deleteClass'])->name('class.delete');
+
+            // Subjects Management
+            Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+            Route::get('/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
+            Route::post('/subjects', [SubjectController::class, 'store'])->name('subjects.store');
+            Route::get('/subjects/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
+            Route::put('/subjects/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
+            Route::delete('/subjects/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+            Route::get('/subjects/{subject}/teachers', [SubjectController::class, 'assignTeachers'])->name('subjects.assign-teachers');
+            Route::put('/subjects/{subject}/teachers', [SubjectController::class, 'updateTeachers'])->name('subjects.update-teachers');
+            Route::get('/teachers/{teacher}/subjects', [SubjectController::class, 'assignSubjects'])->name('subjects.assign-subjects');
+            Route::put('/teachers/{teacher}/subjects', [SubjectController::class, 'updateSubjects'])->name('subjects.update-subjects');
+
+            // Form Teacher Management
+            Route::get('/form-teachers', [FormTeacherController::class, 'index'])->name('form-teachers.index');
+            Route::get('/form-teachers/create', [FormTeacherController::class, 'create'])->name('form-teachers.create');
+            Route::post('/form-teachers', [FormTeacherController::class, 'store'])->name('form-teachers.store');
+            Route::get('/form-teachers/{formTeacher}', [FormTeacherController::class, 'show'])->name('form-teachers.show');
+            Route::get('/form-teachers/{formTeacher}/edit', [FormTeacherController::class, 'edit'])->name('form-teachers.edit');
+            Route::put('/form-teachers/{formTeacher}', [FormTeacherController::class, 'update'])->name('form-teachers.update');
+            Route::delete('/form-teachers/{formTeacher}', [FormTeacherController::class, 'destroy'])->name('form-teachers.destroy');
         });
         
         // Exams (accessible by admin and teachers)
@@ -67,6 +104,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/exams', [AdminController::class, 'storeExam'])->name('exam.store');
         Route::get('/exams/{exam}/edit', [AdminController::class, 'editExam'])->name('exam.edit');
         Route::put('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exam.update');
+        Route::delete('/exams/{exam}', [AdminController::class, 'deleteExam'])->name('exam.delete');
         Route::get('/exams/{exam}/questions', [AdminController::class, 'examQuestions'])->name('exam.questions');
         Route::post('/exams/{exam}/questions', [AdminController::class, 'storeQuestion'])->name('exam.question.store');
         Route::delete('/questions/{question}', [AdminController::class, 'deleteQuestion'])->name('question.delete');
@@ -80,8 +118,58 @@ Route::middleware('auth')->group(function () {
         Route::get('/exams/{exam}/export/pdf', [AdminController::class, 'exportResultsPDF'])->name('exam.export.pdf');
         Route::get('/exams/{exam}/export/word', [AdminController::class, 'exportResultsWord'])->name('exam.export.word');
         Route::get('/attempts/{attempt}/print', [AdminController::class, 'printScript'])->name('attempt.print');
+        
+        // Results Portal Routes
+        Route::prefix('results')->name('results.')->withoutMiddleware('verified')->group(function () {
+            Route::get('/', [ResultsController::class, 'index'])->name('index');
+            Route::get('/statistics', [ResultsController::class, 'statistics'])->name('statistics');
+            Route::get('/exam/{exam}', [ResultsController::class, 'examWise'])->name('exam-wise');
+            Route::get('/class/{class}', [ResultsController::class, 'classWise'])->name('class-wise');
+            Route::get('/student/{student}', [ResultsController::class, 'studentResults'])->name('student');
+            Route::get('/export/pdf', [ResultsController::class, 'exportPDF'])->name('export-pdf');
+            Route::get('/export/csv', [ResultsController::class, 'exportCSV'])->name('export-csv');
+        });
+    });
+
+    // Form Teacher routes (for teachers)
+    Route::prefix('teacher')->name('teacher.')->middleware('role:teacher')->group(function () {
+        Route::get('/form-teacher/dashboard', [FormTeacherController::class, 'dashboard'])->name('form-teacher.dashboard');
+        Route::get('/form-teacher/class/{class}/results', [FormTeacherController::class, 'classResults'])->name('form-teacher.class-results');
+        Route::get('/form-teacher/class/{class}/export', [FormTeacherController::class, 'exportResults'])->name('form-teacher.export-results');
+        
+        // Form Teacher - Add Students
+        Route::get('/form-teacher/class/{class}/students/add', [FormTeacherController::class, 'showAddStudents'])->name('form-teacher.add-students');
+        Route::post('/form-teacher/class/{class}/students', [FormTeacherController::class, 'storeStudentInClass'])->name('form-teacher.store-student');
+        Route::delete('/form-teacher/class/{class}/students/{student}', [FormTeacherController::class, 'removeStudentFromClass'])->name('form-teacher.remove-student');
+        
+        // Form Teacher - Compile Results
+        Route::get('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'compileResults'])->name('form-teacher.compile-results');
+        Route::get('/form-teacher/class/{class}/compile-results/form', [FormTeacherController::class, 'showCompileForm'])->name('form-teacher.compile-form');
+        Route::post('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'storeCompiledResults'])->name('form-teacher.store-compiled-results');
     });
 });
 
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Temporary route to fix exam total marks
+Route::get('/fix-exam-totals', function() {
+    $exams = \App\Models\Exam::all();
+    $fixed = 0;
+    $report = '<h1>Exam Totals Fix Report</h1><table border="1" style="border-collapse:collapse; padding:10px;"><tr><th>Exam</th><th>Old Total</th><th>New Total</th><th>Status</th></tr>';
+    
+    foreach ($exams as $exam) {
+        $oldTotal = $exam->total_marks;
+        $correctTotal = $exam->questions()->sum('marks');
+        
+        if ($oldTotal != $correctTotal) {
+            $exam->update(['total_marks' => $correctTotal]);
+            $report .= "<tr><td>{$exam->title}</td><td style='color:red'>{$oldTotal}</td><td style='color:green'>{$correctTotal}</td><td>✅ Fixed</td></tr>";
+            $fixed++;
+        } else {
+            $report .= "<tr><td>{$exam->title}</td><td>{$oldTotal}</td><td>{$correctTotal}</td><td>✓ Already correct</td></tr>";
+        }
+    }
+    
+    $report .= '</table><br><h2 style="color:green">✅ Fixed ' . $fixed . ' exam(s)!</h2>';
+    $report .= '<br><a href="/">Go to Homepage</a>';
+    
+    return $report;
+});

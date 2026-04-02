@@ -9,48 +9,87 @@
         <div class="text-center">
             <h2 class="text-3xl font-bold text-gray-800 mb-2"><?php echo e($attempt->exam->title); ?></h2>
             <p class="text-gray-600"><?php echo e($attempt->exam->subject); ?></p>
-            
-            <?php if($attempt->isGraded()): ?>
-                <!-- Score Display -->
-                <div class="mt-6 mb-4">
-                    <div class="inline-block <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'bg-green-100' : 'bg-red-100'); ?> rounded-full px-8 py-4">
-                        <div class="text-5xl font-bold <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'text-green-600' : 'text-red-600'); ?>">
-                            <?php echo e($attempt->total_score); ?><span class="text-2xl">/<?php echo e($attempt->exam->total_marks); ?></span>
-                        </div>
-                        <div class="text-sm mt-2 <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'text-green-800' : 'text-red-800'); ?>">
-                            <?php if($attempt->total_score >= $attempt->exam->pass_mark): ?>
-                                ✓ Passed (Pass mark: <?php echo e($attempt->exam->pass_mark); ?>)
-                            <?php else: ?>
-                                ✗ Failed (Pass mark: <?php echo e($attempt->exam->pass_mark); ?>)
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Score Breakdown -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <div class="text-sm text-gray-600">Objective Score</div>
-                        <div class="text-2xl font-bold text-blue-600"><?php echo e($attempt->objective_score ?? 0); ?></div>
-                    </div>
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <div class="text-sm text-gray-600">Subjective Score</div>
-                        <div class="text-2xl font-bold text-purple-600"><?php echo e($attempt->subjective_score ?? 0); ?></div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <div class="text-sm text-gray-600">Percentage</div>
-                        <div class="text-2xl font-bold text-gray-800">
-                            <?php echo e(round(($attempt->total_score / $attempt->exam->total_marks) * 100, 1)); ?>%
-                        </div>
-                    </div>
+
+
+
+
+
+
+            <?php if($attempt->isGraded() || ($attempt->objective_score !== null && $attempt->objective_score > 0)): ?>
+    <!-- Score Display -->
+    <div class="mt-6 mb-4">
+        <div class="inline-block <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'bg-green-100' : 'bg-red-100'); ?> rounded-full px-8 py-4">
+            <div class="text-5xl font-bold <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'text-green-600' : 'text-red-600'); ?>">
+                <?php echo e($attempt->total_score); ?><span class="text-2xl">/<?php echo e($attempt->exam->total_marks); ?></span>
+            </div>
+            <?php if(!$attempt->isGraded()): ?>
+                <div class="text-sm mt-2 text-orange-800">
+                    ⏳ Partial Result (Coding questions pending manual grading)
                 </div>
             <?php else: ?>
-                <!-- Pending Grading -->
-                <div class="mt-6 bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg">
-                    <p class="font-semibold">⏳ Grading in Progress</p>
-                    <p class="text-sm mt-1">Your exam has been submitted and is awaiting manual grading by your teacher.</p>
+                <div class="text-sm mt-2 <?php echo e($attempt->total_score >= $attempt->exam->pass_mark ? 'text-green-800' : 'text-red-800'); ?>">
+                    <?php if($attempt->total_score >= $attempt->exam->pass_mark): ?>
+                        ✓ Passed (Pass mark: <?php echo e($attempt->exam->pass_mark); ?>)
+                    <?php else: ?>
+                        ✗ Failed (Pass mark: <?php echo e($attempt->exam->pass_mark); ?>)
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Score Breakdown -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="bg-blue-50 p-4 rounded-lg <?php echo e($attempt->isGraded() ? '' : 'border-2 border-green-500'); ?>">
+            <div class="text-sm text-gray-600">Objective Score</div>
+            <div class="text-2xl font-bold text-blue-600">
+                <?php echo e($attempt->objective_score ?? 0); ?><span class="text-lg text-blue-400">/<?php echo e($objectiveTotal); ?></span>
+            </div>
+            <?php if(!$attempt->isGraded()): ?>
+                <div class="text-xs text-green-600 mt-1 font-semibold">✅ Auto-graded</div>
+            <?php endif; ?>
+        </div>
+        <div class="bg-purple-50 p-4 rounded-lg <?php echo e($attempt->isGraded() ? '' : 'border-2 border-orange-500'); ?>">
+            <div class="text-sm text-gray-600">Subjective Score</div>
+            <div class="text-2xl font-bold text-purple-600">
+                <?php echo e($attempt->subjective_score ?? 0); ?><span class="text-lg text-purple-400">/<?php echo e($subjectiveTotal); ?></span>
+            </div>
+            <?php if(!$attempt->isGraded()): ?>
+                <div class="text-xs text-orange-600 mt-1 font-semibold">⏳ Awaiting teacher grading</div>
+            <?php endif; ?>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="text-sm text-gray-600">Percentage</div>
+            <div class="text-2xl font-bold text-gray-800">
+                <?php
+                    $percentage = $attempt->exam->total_marks > 0 
+                        ? round(($attempt->total_score / $attempt->exam->total_marks) * 100, 1) 
+                        : 0;
+                ?>
+                <?php echo e($percentage); ?>%
+            </div>
+            <?php if(!$attempt->isGraded()): ?>
+                <div class="text-xs text-gray-600 mt-1">Partial percentage</div>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php else: ?>
+    <!-- No Scores Yet (All Subjective) -->
+    <div class="mt-6 bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg">
+        <p class="font-semibold">⏳ Grading in Progress</p>
+        <p class="text-sm mt-1">Your exam has been submitted and is awaiting manual grading by your teacher.</p>
+    </div>
+<?php endif; ?>
+
+            
+           
+
+
+
+
+
+
         </div>
     </div>
 
@@ -70,16 +109,16 @@
                 <span class="text-gray-600">Total Questions:</span>
                 <p class="font-semibold"><?php echo e($attempt->exam->questions->count()); ?></p>
             </div>
-            <div>
-                <span class="text-gray-600">Status:</span>
-                <p class="font-semibold">
-                    <?php if($attempt->isGraded()): ?>
-                        <span class="text-green-600">Graded</span>
-                    <?php else: ?>
-                        <span class="text-yellow-600">Pending</span>
-                    <?php endif; ?>
-                </p>
-            </div>
+           <div>
+    <span class="text-gray-600">Status:</span>
+    <p class="font-semibold">
+        <?php if($attempt->isGraded()): ?>
+            <span class="text-green-600">Graded</span>
+        <?php else: ?>
+            <span class="text-yellow-600">Pending</span>
+        <?php endif; ?>
+    </p>
+</div>
         </div>
     </div>
 
@@ -202,20 +241,6 @@
            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
             ← Back to Dashboard
         </a>
-        <?php if($attempt->isGraded()): ?>
-        <button onclick="window.print()" 
-                class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            🖨️ Print Result
-        </button>
-        <a href="<?php echo e(route('student.download-result-pdf', $attempt->id)); ?>" 
-           class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            📄 Download PDF
-        </a>
-        <a href="<?php echo e(route('student.download-result-word', $attempt->id)); ?>" 
-           class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            📝 Download Word
-        </a>
-        <?php endif; ?>
     </div>
 </div>
 </div>
