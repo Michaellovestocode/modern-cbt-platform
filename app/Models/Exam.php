@@ -13,6 +13,7 @@ class Exam extends Model
         'title',
         'description',
         'subject',
+        'subject_id',
         'duration_minutes',
         'total_marks',
         'pass_mark',
@@ -50,6 +51,11 @@ class Exam extends Model
     public function attempts()
     {
         return $this->hasMany(ExamAttempt::class);
+    }
+
+    public function subjectModel()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function isAvailable(): bool

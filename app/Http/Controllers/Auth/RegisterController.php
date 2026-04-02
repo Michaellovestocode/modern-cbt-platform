@@ -28,7 +28,16 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
+
+    protected function redirectPath()
+    {
+        $user = auth()->user();
+        if ($user->isStudent()) {
+            return route('student.dashboard');
+        }
+        return route('admin.dashboard');
+    }
 
     /**
      * Create a new controller instance.

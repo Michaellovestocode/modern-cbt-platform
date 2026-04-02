@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\SchoolClass;
+use App\Models\Subject;
 use App\Models\User;
 use App\Models\ExamAttempt;
 use App\Models\Answer;
@@ -42,7 +43,10 @@ class AdminController extends Controller
             ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact('examsCount', 'studentsCount', 'recentExams', 'recentAttempts'));
+        // Check if user is a form teacher
+        $isFormTeacher = $user->isTeacher() && \App\Models\FormTeacher::where('teacher_id', $user->id)->exists();
+
+        return view('admin.dashboard', compact('examsCount', 'studentsCount', 'recentExams', 'recentAttempts', 'isFormTeacher'));
     }
 
     public function exams()
@@ -62,7 +66,16 @@ class AdminController extends Controller
     public function createExam()
     {
         $classes = SchoolClass::all();
-        return view('admin.exams.create', compact('classes'));
+        
+        // Get subjects based on user role
+        if (Auth::user()->isAdmin()) {
+            $subjects = Subject::where('is_active', true)->get();
+        } else {
+            // Teachers can only see their assigned subjects
+            $subjects = Auth::user()->subjects()->where('is_active', true)->get();
+        }
+        
+        return view('admin.exams.create', compact('classes', 'subjects'));
     }
 
     public function storeExam(Request $request)
@@ -70,7 +83,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'subject' => 'required|string|max:255',
+            'subject_id' => 'required|exists:subjects,id',
             'duration_minutes' => 'required|integer|min:1',
             'total_marks' => 'required|integer|min:1',
             'pass_mark' => 'required|integer|min:0',
@@ -81,10 +94,22 @@ class AdminController extends Controller
             'classes.*' => 'exists:school_classes,id',
         ]);
 
+        // Check if teacher is creating exam for a subject they don't have
+        if (!Auth::user()->isAdmin()) {
+            $userSubjects = Auth::user()->subjects()->pluck('subjects.id')->toArray();
+            if (!in_array($validated['subject_id'], $userSubjects)) {
+                return back()->withErrors(['subject_id' => 'You can only create exams for your assigned subjects.']);
+            }
+        }
+
+        // Get subject name for backward compatibility
+        $subject = Subject::findOrFail($validated['subject_id']);
+        
         $exam = Exam::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'subject' => $validated['subject'],
+            'subject' => $subject->name,
+            'subject_id' => $validated['subject_id'],
             'duration_minutes' => $validated['duration_minutes'],
             'total_marks' => $validated['total_marks'],
             'pass_mark' => $validated['pass_mark'],
@@ -102,17 +127,26 @@ class AdminController extends Controller
     }
 
     public function editExam($examId)
-{
-    $exam = Exam::with('classes')->findOrFail($examId);
-    
-    // Check permission
-    if (!Auth::user()->isAdmin() && $exam->created_by != Auth::id()) {
-        abort(403);
-    }
+    {
+        $exam = Exam::with('classes')->findOrFail($examId);
+        
+        // Check permission
+        if (!Auth::user()->isAdmin() && $exam->created_by != Auth::id()) {
+            abort(403);
+        }
 
-    $classes = SchoolClass::all();
-    return view('admin.exams.edit', compact('exam', 'classes'));
-}
+        $classes = SchoolClass::all();
+        
+        // Get subjects based on user role
+        if (Auth::user()->isAdmin()) {
+            $subjects = Subject::where('is_active', true)->get();
+        } else {
+            // Teachers can only see their assigned subjects
+            $subjects = Auth::user()->subjects()->where('is_active', true)->get();
+        }
+        
+        return view('admin.exams.edit', compact('exam', 'classes', 'subjects'));
+    }
 
 public function updateExam(Request $request, $examId)
 {
@@ -126,7 +160,7 @@ public function updateExam(Request $request, $examId)
     $validated = $request->validate([
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'subject' => 'required|string|max:255',
+        'subject_id' => 'required|exists:subjects,id',
         'duration_minutes' => 'required|integer|min:1',
         'total_marks' => 'required|integer|min:1',
         'pass_mark' => 'required|integer|min:0',
@@ -138,10 +172,22 @@ public function updateExam(Request $request, $examId)
         'is_active' => 'boolean',
     ]);
 
+    // Check if teacher is updating exam to a subject they don't have
+    if (!Auth::user()->isAdmin()) {
+        $userSubjects = Auth::user()->subjects()->pluck('subjects.id')->toArray();
+        if (!in_array($validated['subject_id'], $userSubjects)) {
+            return back()->withErrors(['subject_id' => 'You can only update exams to your assigned subjects.']);
+        }
+    }
+
+    // Get subject name for backward compatibility
+    $subject = Subject::findOrFail($validated['subject_id']);
+
     $exam->update([
         'title' => $validated['title'],
         'description' => $validated['description'],
-        'subject' => $validated['subject'],
+        'subject' => $subject->name,
+        'subject_id' => $validated['subject_id'],
         'duration_minutes' => $validated['duration_minutes'],
         'total_marks' => $validated['total_marks'],
         'pass_mark' => $validated['pass_mark'],
@@ -156,6 +202,32 @@ public function updateExam(Request $request, $examId)
 
     return redirect()->route('admin.exams')
         ->with('success', 'Exam updated successfully!');
+}
+
+public function deleteExam($examId)
+{
+    $exam = Exam::findOrFail($examId);
+    
+    // Check permission - only admin or the teacher who created it can delete
+    if (!Auth::user()->isAdmin() && $exam->created_by != Auth::id()) {
+        abort(403);
+    }
+
+    // Delete all associated questions' images
+    foreach ($exam->questions as $question) {
+        if ($question->image_path) {
+            $path = public_path('storage/' . $question->image_path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+    }
+
+    // Delete all associated records through cascading relationships
+    $exam->delete();
+
+    return redirect()->route('admin.exams')
+        ->with('success', 'Exam deleted successfully!');
 }
 
     public function examQuestions($examId)
