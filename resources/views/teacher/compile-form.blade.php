@@ -11,7 +11,7 @@
                 <h2 class="text-2xl font-bold text-gray-800">Manually Enter Result - {{ $class->name }}</h2>
                 <p class="text-gray-600">Fill in exam results for your students</p>
             </div>
-            <a href="{{ route('teacher.form-teacher.compile-results', $class->id) }}"
+            <a href="{{ route('teacher.scores.dashboard') }}"
                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold">
                 <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -21,29 +21,19 @@
         </div>
     </div>
 
-    <!-- Form -->
+    <!-- Form Disabled -->
     <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-xl font-bold text-gray-800 mb-6">Enter Student Result</h3>
+        <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6 text-center">
+            <p class="text-yellow-800 font-bold text-lg mb-4">⚠️ Form Compilation Feature Unavailable</p>
+            <p class="text-yellow-700 mb-6">The manual result entry form is temporarily unavailable. Please use the Score Entry module to record student scores.</p>
+            <a href="{{ route('teacher.scores.dashboard') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold">
+                Go to Score Entry Dashboard
+            </a>
+        </div>
+    </div>
 
-        @if ($errors->any())
-            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                <div class="flex items-center">
-                    <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
-                    <div>
-                        <h4 class="text-red-800 font-semibold">Please fix the following errors:</h4>
-                        <ul class="text-red-700 mt-2 list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        <form action="{{ route('teacher.form-teacher.store-compiled-results', $class->id) }}" method="POST" class="space-y-6">
+    <!-- Original Form - Commented Out -->
+    <!--
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,6 +181,7 @@
             @endif
         </div>
     </div>
+    -->
 </div>
 
 <script>

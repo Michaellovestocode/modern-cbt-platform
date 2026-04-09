@@ -25,7 +25,25 @@
     @endif
 
     <div class="flex flex-wrap -mx-4">
-        <!-- Add New Student -->
+        <!-- Add New Student - Disabled -->
+        <div class="w-full md:w-1/2 px-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md border-2 border-yellow-400">
+                <div class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-t-lg">
+                    <h5 class="text-lg font-semibold mb-0">⚠️ Student Management Unavailable</h5>
+                </div>
+                <div class="p-4">
+                    <p class="text-yellow-700 font-medium mb-4">
+                        The student management feature is temporarily unavailable. This functionality should be accessed through the Admin Dashboard.
+                    </p>
+                    <a href="{{ route('teacher.scores.dashboard') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Go to Score Entry
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Original Form - Commented Out -->
+        <!--
         <div class="w-full md:w-1/2 px-4 mb-6">
             <div class="bg-white rounded-lg shadow-md">
                 <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg">
@@ -63,7 +81,8 @@
             </div>
         </div>
 
-        <!-- Current Students -->
+        <!-- Current Students - Commented Out -->
+        <!--
         <div class="w-full md:w-1/2 px-4">
             <div class="bg-white rounded-lg shadow-md">
                 <div class="bg-blue-500 text-white px-4 py-3 rounded-t-lg">
@@ -122,11 +141,12 @@
                 </div>
             </div>
         </div>
+        -->
     </div>
 
     <!-- Back Button -->
     <div class="mt-6">
-        <a href="{{ route('teacher.form-teacher.dashboard') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+        <a href="{{ route('teacher.scores.dashboard') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>

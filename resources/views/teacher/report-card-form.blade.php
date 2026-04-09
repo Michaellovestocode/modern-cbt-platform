@@ -16,7 +16,7 @@
                         {{ $student ? 'Update report card for ' . $student->name : 'Create a new report card for a student in your assigned classes' }}
                     </p>
                 </div>
-                <a href="{{ route('teacher.report-cards') }}"
+                <a href="{{ route('teacher.scores.dashboard') }}"
                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition duration-150 ease-in-out">
                     <i class="fas fa-arrow-left mr-2"></i>Back to Report Cards
                 </a>

@@ -11,11 +11,11 @@
                 <p class="text-gray-600">{{ $class->description }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('teacher.form-teacher.export-results', $class->id) }}" 
+                <a href="{{ route('teacher.scores.dashboard') }}" 
                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold">
                     📥 Export PDF
                 </a>
-                <a href="{{ route('teacher.form-teacher.dashboard') }}" 
+                <a href="{{ route('teacher.scores.dashboard') }}" 
                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold">
                     ← Back
                 </a>
