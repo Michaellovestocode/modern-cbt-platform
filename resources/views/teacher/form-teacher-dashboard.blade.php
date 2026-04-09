@@ -60,6 +60,12 @@
                        class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold text-center transition">
                         📥 Export PDF
                     </a>
+                    @if($data->count() > 0)
+                    <a href="{{ route('teacher.report-cards') }}" 
+                       class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold text-center transition">
+                        📄 Report Cards
+                    </a>
+                    @endif
                 </div>
             </div>
 
