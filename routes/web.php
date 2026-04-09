@@ -57,6 +57,7 @@ Route::get('/teacher/scores/select', [TeacherScoreController::class, 'selectClas
 Route::post('/teacher/scores/enter', [TeacherScoreController::class, 'enterScores'])->name('teacher.scores.enter');
 Route::post('/teacher/scores/save', [TeacherScoreController::class, 'saveScores'])->name('teacher.scores.save');
 Route::post('/teacher/scores/submit', [TeacherScoreController::class, 'submitScores'])->name('teacher.scores.submit');
+Route::get('/teacher/scores/my-scores', [TeacherScoreController::class, 'myScores'])->name('teacher.scores.my-scores');
 
 // Nigerian Report Cards
 Route::get('/admin/report-cards', [NigerianReportCardController::class, 'index'])->name('admin.report-cards');
