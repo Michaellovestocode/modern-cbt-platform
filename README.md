@@ -1,123 +1,144 @@
-# Nigerian School CBT (Computer-Based Test) System - Laravel 12
+# Modern CBT Platform for High School
 
-A comprehensive Computer-Based Testing system built with Laravel 12 for Nigerian schools.
+A comprehensive Computer-Based Testing (CBT) platform designed for Nigerian high schools to manage exams, track student performance, and generate detailed report cards with a complete teacher and admin management system.
 
-## Features
+**Repository**: https://github.com/michaeljohnsontweets-ui/advance_school_system.git
+
+## 🎯 Core Features
 
 ### Student Features
-- Login with registration number or email
-- Dashboard with assigned exams
-- Take exams with multiple question types:
-  - Multiple Choice (A/B/C/D)
-  - Theory/Essay (manual grading)
-  - Coding (in-browser code editor)
-  - Fill-in-the-blank
-- Exam timer with countdown
-- Auto-save answers every 30 seconds
-- Auto-submit when time expires
-- View results and feedback
+- **Dashboard**: View available exams and past attempts
+- **Exam Taking**: Interactive exam interface with timer and auto-save
+- **Result Viewing**: Instant exam results, score breakdowns, and performance analytics
+- **Result Export**: Download results as PDF or Word format
+- **Progress Tracking**: View past attempts and performance history
+- **Login Integration**: Register with email or ID
 
-### Teacher/Admin Features
-- Secure login system
-- Create and manage exams
-- Add questions with different types
-- Assign exams to specific classes
-- Manual grading interface for theory/coding questions
-- Export results as PDF
-- Export results as Word document
-- Print individual exam scripts
-- Analytics dashboard:
-  - Average scores
-  - Highest and lowest scores
-  - Pass rate
-  - Class performance
+### Teacher Features
+- **Score Entry**: Enter continuous assessment (CA1, CA2, CA3) and exam scores
+- **Class Management**: Manage students in assigned classes
+- **Result Compilation**: Compile and finalize exam results
+- **Report Card Generation**: Create and manage student report cards (Nigerian standard)
+- **Results Viewing**: Analyze class and student performance
+- **Data Export**: Export results for further analysis
+- **Dashboard**: Teacher-specific performance metrics
 
-## Technical Stack
-- **Framework**: Laravel 12 (Latest)
-- **PHP**: ^8.2
-- **Database**: MySQL
+### Admin Features
+- **Dashboard**: System overview with statistics and analytics
+- **Exam Management**: Create, edit, and delete exams with time limits
+- **Question Management**: Add questions with images to exams
+- **Student Management**: Register and manage students
+- **Teacher Management**: Assign teachers and manage roles
+- **Class Management**: Create and organize school classes
+- **Subject Management**: Manage subjects and assign teachers  
+- **Form Teacher Assignment**: Assign form teachers to classes
+- **Results Portal**: Analyze and export exam results (PDF/CSV/Word)
+- **User Management**: Manage user accounts and permissions
+- **Report Card Management**: Generate Nigerian standard report cards
+
+## 🏗️ Technical Stack
+
+- **Framework**: Laravel 10.x (PHP)
+- **PHP**: ^8.1
+- **Database**: MySQL/MariaDB
 - **Frontend**: Blade Templates + TailwindCSS + Alpine.js
+- **Build Tool**: Vite
 - **PDF Export**: barryvdh/laravel-dompdf
 - **Word Export**: phpoffice/phpword
-- **Code Editor**: CodeMirror (CDN)
+- **Authentication**: Laravel Sanctum
+- **Storage**: Local filesystem with S3 support
 
-## Installation
+## 🚀 Installation Guide
 
 ### Prerequisites
-- PHP >= 8.2
+- PHP >= 8.1
 - Composer
-- MySQL/MariaDB
-- Node.js & NPM (optional, for asset compilation)
+- MySQL/MariaDB 5.7+
+- Node.js & npm (for asset compilation)
+- Laragon or XAMPP (recommended for Windows)
 
-### Setup Instructions
+### Quick Setup
 
-1. **Extract the ZIP file**
+1. **Clone Repository**
    ```bash
-   unzip nigerian-cbt-system.zip
-   cd nigerian-cbt-system
+   git clone https://github.com/michaeljohnsontweets-ui/advance_school_system.git
+   cd advance_school_system
    ```
 
-2. **Install Dependencies**
+2. **Install PHP Dependencies**
    ```bash
    composer install
    ```
 
-3. **Environment Configuration**
+3. **Install Node Dependencies**
    ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` file and configure your database:
-   ```
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=nigerian_cbt
-   DB_USERNAME=root
-   DB_PASSWORD=your_password
+   npm install
    ```
 
-4. **Generate Application Key**
+4. **Environment Setup**
    ```bash
+   cp .env.example .env
    php artisan key:generate
    ```
 
-5. **Run Migrations**
+5. **Database Configuration**
+   
+   Edit `.env` and configure:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=modern_cbt_platform
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+6. **Run Migrations**
    ```bash
    php artisan migrate
    ```
 
-6. **Seed Database** (Creates demo users and sample exam)
+7. **Seed Sample Data** (Optional)
    ```bash
    php artisan db:seed
    ```
 
-7. **Start Development Server**
+8. **Build Frontend Assets**
    ```bash
-   php artisan serve
+   npm run dev
+   # or for production:
+   npm run build
    ```
 
-8. **Access the Application**
-   Open your browser and navigate to: `http://localhost:8000`
+9. **Create Storage Symlink**
+   ```bash
+   php artisan storage:link
+   ```
 
-## Default Login Credentials
+10. **Start Development Server**
+    ```bash
+    php artisan serve
+    ```
 
-After seeding the database, use these credentials:
+Access application at: **http://localhost:8000**
+
+## 🔐 Default Login Credentials
+
+After running migrations and seeders:
 
 ### Admin Account
 - **Email**: admin@school.com
 - **Password**: password
 
-### Teacher Accounts
-- **Email**: okafor@school.com | **Password**: password
-- **Email**: adeyemi@school.com | **Password**: password
+### Teacher Accounts  
+- **Email**: teacher@school.com
+- **Password**: password
 
 ### Student Accounts
-- **Registration No**: STD2024001 | **Password**: password
-- **Registration No**: STD2024002 | **Password**: password
-- **Registration No**: STD2024003 | **Password**: password
-- **Registration No**: STD2024004 | **Password**: password
-- **Registration No**: STD2024005 | **Password**: password
+- **Registration No**: STD2024001
+- **Password**: password
+
+> ⚠️ **Security**: Change all default passwords immediately in production!
 
 ## Usage Guide
 
@@ -139,135 +160,238 @@ After seeding the database, use these credentials:
 7. Export results as PDF or Word
 8. Print individual scripts
 
-## File Structure
+## 📚 Project Structure
 
 ```
-nigerian-cbt-system/
+modern-cbt-platform-for-highschool/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
+│   │   │   ├── AdminController.php
+│   │   │   ├── AdminExamController.php
 │   │   │   ├── AuthController.php
 │   │   │   ├── StudentController.php
-│   │   │   └── AdminController.php
+│   │   │   ├── SubjectController.php
+│   │   │   ├── TeacherScoreController.php
+│   │   │   ├── NigerianReportCardController.php
+│   │   │   └── ResultsController.php
 │   │   └── Middleware/
 │   │       └── RoleMiddleware.php
-│   └── Models/
-│       ├── User.php
-│       ├── Exam.php
-│       ├── Question.php
-│       ├── ExamAttempt.php
-│       ├── Answer.php
-│       └── SchoolClass.php
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Exam.php
+│   │   ├── Question.php
+│   │   ├── ExamAttempt.php
+│   │   ├── Answer.php
+│   │   ├── SchoolClass.php
+│   │   ├── Subject.php
+│   │   ├── Score.php
+│   │   ├── Session.php
+│   │   ├── Term.php
+│   │   ├── ReportCard.php
+│   │   ├── FormTeacher.php
+│   │   └── SchoolSettings.php
+│   └── Exceptions/
 ├── database/
 │   ├── migrations/
-│   └── seeders/
-│       └── DatabaseSeeder.php
+│   ├── seeders/
+│   │   ├── DatabaseSeeder.php
+│   │   ├── SessionSeeder.php
+│   │   └── SubjectSeeder.php
+│   └── factories/
 ├── resources/
-│   └── views/
-│       ├── auth/
-│       ├── student/
-│       ├── admin/
-│       └── layouts/
-└── routes/
-    └── web.php
+│   ├── views/
+│   │   ├── admin/
+│   │   │   ├── dashboard.blade.php
+│   │   │   ├── exams/
+│   │   │   ├── students/
+│   │   │   ├── teachers/
+│   │   │   ├── classes/
+│   │   │   └── report-cards/
+│   │   ├── student/
+│   │   │   └── dashboard.blade.php
+│   │   ├── teacher/
+│   │   │   ├── scores/
+│   │   │   ├── form-teacher-dashboard.blade.php
+│   │   │   └── report-cards/
+│   │   ├── auth/
+│   │   │   ├── login.blade.php
+│   │   │   └── register.blade.php
+│   │   └── layouts/
+│   └── sass/
+├── routes/
+│   └── web.php
+├── storage/
+│   ├── app/
+│   ├── logs/
+│   └── framework/
+├── public/
+│   ├── storage/
+│   └── index.php
+├── tests/
+├── .gitignore
+├── composer.json
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
-## Database Schema
+## 📊 Database Schema
 
-### Users
+### Core Tables
+
+**users**
 - Students, Teachers, and Admins
-- Role-based access control
+- Role-based access control (admin, teacher, student)
+- Photo/avatar storage
 
-### School Classes
+**school_classes**
 - SS1, SS2, SS3, etc.
+- Class capacity and information
 
-### Exams
-- Title, subject, duration, marks
+**subjects**
+- Curriculum subjects
+- Subject codes and descriptions
+- Linked to teachers
+
+**exams**
+- Title, description, duration, marks
 - Start and end dates
+- Subject association
 
-### Questions
-- Multiple types: MCQ, Theory, Coding, Fill-blank
+**questions**
+- Multiple choice or theory
+- Question content with images support
 - Linked to exams
 
-### Exam Attempts
+**exam_attempts**
 - Student submissions
 - Scores and grading status
+- Attempt start/end times
 
-### Answers
-- Student responses
-- Auto-grading for objective questions
-- Manual grading for subjective questions
+**answers**
+- Student responses to questions
+- Auto-grading for objective, manual for subjective
 
-## Features in Detail
+**scores**
+- Continuous Assessment (CA1, CA2, CA3)
+- Exam scores per subject
+- Teacher and student linked
 
-### Auto-Grading
-- Multiple choice questions are graded automatically
-- Fill-in-the-blank questions are graded automatically (case-insensitive)
-- Theory and coding questions require manual grading
+**sessions** & **terms**
+- Academic session/year
+- Terms per session (1st, 2nd, 3rd)
 
-### Timer System
-- Countdown timer displayed during exam
-- Warning when time is running out
-- Auto-submit when time expires
+**report_cards**
+- Nigerian standard report card format
+- Scores, comments, ratings
+- Student and form teacher linked
 
-### Auto-Save
-- Answers saved every 30 seconds
-- Manual save on answer change
-- Resume exam if interrupted
+**form_teachers**
+- Teachers assigned as form teachers
+- Class management relationships
+
+## 🔑 Key Features Explained
+
+### Score Entry System
+- Continuous Assessment scores (CA1, CA2, CA3) each out of 10
+- Exam scores out of 70
+- Total = 30 (CA) + 70 (Exam) = 100
+- Teacher submits scores for final approval
+
+### Nigerian Report Card Format
+- Student name, class, session/term
+- Subject-wise performance display
+- Rating system (A1-F9)
+- Teacher comments and overall rating
+- Position/ranking in class
+- PDF generation for printing
+
+### Automatic Grading
+- Multiple choice questions graded instantly
+- Fill-in-the-blank (case-insensitive)
+- Theory questions require manual teacher grading
 
 ### Export Features
-- **PDF Export**: Formatted results report
-- **Word Export**: Editable results document
-- **Print Script**: Individual student answer sheets
+- **PDF Export**: Formatted, printable results
+- **Word Export**: Editable results document  
+- **CSV Export**: Data analysis compatibility
+- **Report Cards**: Nigerian standard format
 
-## Security Features
-- CSRF protection on all forms
-- Password hashing with bcrypt
-- Role-based middleware
-- Session management
-- SQL injection protection (Eloquent ORM)
+## 🛡️ Security Features
 
-## Browser Compatibility
-- Chrome (Recommended)
-- Firefox
-- Safari
-- Edge
-- Opera
+- **CSRF Protection**: All forms protected with CSRF tokens
+- **Authentication**: Laravel's built-in authentication
+- **Authorization**: Role-based middleware for route protection
+- **Password Hashing**: bcrypt with configurable rounds
+- **SQL Injection Prevention**: Eloquent ORM parameterized queries
+- **Input Validation**: Server-side validation on all forms
+- **Session Management**: Secure session handling
+- **Storage Security**: Symlinked private storage
 
-## Troubleshooting
+## 🌐 Browser Compatibility
 
-### Database Connection Error
-- Verify MySQL is running
-- Check database credentials in `.env`
-- Ensure database exists: `CREATE DATABASE nigerian_cbt;`
+- Chrome/Chromium (Latest) ✅
+- Firefox (Latest) ✅
+- Safari (Latest) ✅
+- Edge (Latest) ✅
+- Opera (Latest) ✅
 
-### Permission Errors
+## 🚀 Deployment
+
+### Production Checklist
+- [ ] Set `.env` to `APP_DEBUG=false`
+- [ ] Set `.env` to `APP_ENV=production`
+- [ ] Run `composer install --no-dev`
+- [ ] Run migrations: `php artisan migrate --force`
+- [ ] Optimize: `php artisan optimize`
+- [ ] Build frontend: `npm run build`
+- [ ] Set proper file permissions on storage
+- [ ] Configure SSL certificate
+
+### Deployment Commands
 ```bash
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
+# Optimize configuration
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Clear all caches
+php artisan cache:clear
+php artisan view:clear
 ```
 
-### Composer Install Fails
-- Ensure PHP >= 8.2 is installed
-- Run: `php -v` to check version
-- Update composer: `composer self-update`
+### Docker Deployment
+See `Dockerfile` for containerized deployment instructions.
 
-## Support & Customization
-This system can be customized for your school's specific needs:
-- Add more question types
-- Custom grading rules
-- Additional user roles
-- SMS notifications
-- Email results
-- Student portal features
+## 🐛 Troubleshooting
 
-## License
-MIT License
+| Issue | Solution |
+|-------|----------|
+| "Target class does not exist" | Check controller imports in `routes/web.php` |
+| Database connection error | Verify credentials in `.env`, ensure MySQL running |
+| Permission denied on storage | Run: `chmod -R 775 storage bootstrap/cache` |
+| Vite build errors | Delete `node_modules`, run `npm install` again |
+| Blank page/500 error | Check `storage/logs/laravel.log` for details |
+| Storage files not accessible | Run: `php artisan storage:link` |
 
-## Credits
-Built with Laravel 12 - The PHP Framework for Web Artisans
+## 🤝 Contributing
 
----
-**Version**: 1.0.0  
-**Release Date**: December 2025  
-**Laravel Version**: 12.x
+1. Fork repository
+2. Create feature branch: `git checkout -b feature/YourFeature`
+3. Commit changes: `git commit -m 'Add YourFeature'`
+4. Push to branch: `git push origin feature/YourFeature`
+5. Submit Pull Request
+
+## 📝 Git Workflow
+
+```bash
+# Initial setup
+git config user.name "Your Name"
+git config user.email "your.email@example.com"
+
+# Regular commits
+git add .
+git commit -m "Descriptive message"
+git push origin main
+```

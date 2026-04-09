@@ -6,7 +6,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\FormTeacherController;
+use App\Http\Controllers\TeacherScoreController;
+use App\Http\Controllers\NigerianReportCardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,24 @@ Route::middleware('auth')->group(function () {
         Route::get('/attempt/{attempt}/download-word', [StudentController::class, 'downloadResultWord'])->name('download-result-word');
     });
 
+
+    // Teacher Score Entry
+Route::get('/teacher/scores', [TeacherScoreController::class, 'dashboard'])->name('teacher.scores.dashboard');
+Route::get('/teacher/scores/select', [TeacherScoreController::class, 'selectClassSubject'])->name('teacher.scores.select');
+Route::post('/teacher/scores/enter', [TeacherScoreController::class, 'enterScores'])->name('teacher.scores.enter');
+Route::post('/teacher/scores/save', [TeacherScoreController::class, 'saveScores'])->name('teacher.scores.save');
+Route::post('/teacher/scores/submit', [TeacherScoreController::class, 'submitScores'])->name('teacher.scores.submit');
+
+// Nigerian Report Cards
+Route::get('/admin/report-cards', [NigerianReportCardController::class, 'index'])->name('admin.report-cards');
+Route::get('/admin/report-cards/generate/{student}', [NigerianReportCardController::class, 'generate'])->name('admin.report-cards.generate');
+Route::get('/admin/report-cards/{id}/preview', [NigerianReportCardController::class, 'preview'])->name('admin.report-cards.preview');
+Route::get('/admin/report-cards/{id}/download', [NigerianReportCardController::class, 'downloadPDF'])->name('admin.report-cards.download');
+Route::post('/admin/report-cards/bulk', [NigerianReportCardController::class, 'bulkGenerate'])->name('admin.report-cards.bulk');
+Route::post('/admin/report-cards/{id}/comments', [NigerianReportCardController::class, 'updateComments'])->name('admin.report-cards.comments');
+
+
+
     // Admin/Teacher routes
     Route::prefix('admin')->name('admin.')->middleware('role:admin,teacher')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -88,14 +107,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/teachers/{teacher}/subjects', [SubjectController::class, 'assignSubjects'])->name('subjects.assign-subjects');
             Route::put('/teachers/{teacher}/subjects', [SubjectController::class, 'updateSubjects'])->name('subjects.update-subjects');
 
-            // Form Teacher Management
-            Route::get('/form-teachers', [FormTeacherController::class, 'index'])->name('form-teachers.index');
-            Route::get('/form-teachers/create', [FormTeacherController::class, 'create'])->name('form-teachers.create');
-            Route::post('/form-teachers', [FormTeacherController::class, 'store'])->name('form-teachers.store');
-            Route::get('/form-teachers/{formTeacher}', [FormTeacherController::class, 'show'])->name('form-teachers.show');
-            Route::get('/form-teachers/{formTeacher}/edit', [FormTeacherController::class, 'edit'])->name('form-teachers.edit');
-            Route::put('/form-teachers/{formTeacher}', [FormTeacherController::class, 'update'])->name('form-teachers.update');
-            Route::delete('/form-teachers/{formTeacher}', [FormTeacherController::class, 'destroy'])->name('form-teachers.destroy');
+            // Form Teacher Management - FormTeacherController was renamed to TeacherScoreController
+            // These routes are commented out because TeacherScoreController has different methods
+            // TODO: Implement these methods in TeacherScoreController or create a new FormTeacherController
+            // Route::get('/form-teachers', [FormTeacherController::class, 'index'])->name('form-teachers.index');
+            // Route::get('/form-teachers/create', [FormTeacherController::class, 'create'])->name('form-teachers.create');
+            // Route::post('/form-teachers', [FormTeacherController::class, 'store'])->name('form-teachers.store');
+            // Route::get('/form-teachers/{formTeacher}', [FormTeacherController::class, 'show'])->name('form-teachers.show');
+            // Route::get('/form-teachers/{formTeacher}/edit', [FormTeacherController::class, 'edit'])->name('form-teachers.edit');
+            // Route::put('/form-teachers/{formTeacher}', [FormTeacherController::class, 'update'])->name('form-teachers.update');
+            // Route::delete('/form-teachers/{formTeacher}', [FormTeacherController::class, 'destroy'])->name('form-teachers.destroy');
         });
         
         // Exams (accessible by admin and teachers)
@@ -131,22 +152,32 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // Form Teacher routes (for teachers)
-    Route::prefix('teacher')->name('teacher.')->middleware('role:teacher')->group(function () {
-        Route::get('/form-teacher/dashboard', [FormTeacherController::class, 'dashboard'])->name('form-teacher.dashboard');
-        Route::get('/form-teacher/class/{class}/results', [FormTeacherController::class, 'classResults'])->name('form-teacher.class-results');
-        Route::get('/form-teacher/class/{class}/export', [FormTeacherController::class, 'exportResults'])->name('form-teacher.export-results');
-        
-        // Form Teacher - Add Students
-        Route::get('/form-teacher/class/{class}/students/add', [FormTeacherController::class, 'showAddStudents'])->name('form-teacher.add-students');
-        Route::post('/form-teacher/class/{class}/students', [FormTeacherController::class, 'storeStudentInClass'])->name('form-teacher.store-student');
-        Route::delete('/form-teacher/class/{class}/students/{student}', [FormTeacherController::class, 'removeStudentFromClass'])->name('form-teacher.remove-student');
-        
-        // Form Teacher - Compile Results
-        Route::get('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'compileResults'])->name('form-teacher.compile-results');
-        Route::get('/form-teacher/class/{class}/compile-results/form', [FormTeacherController::class, 'showCompileForm'])->name('form-teacher.compile-form');
-        Route::post('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'storeCompiledResults'])->name('form-teacher.store-compiled-results');
-    });
+    // Form Teacher routes (for teachers) - FormTeacherController was renamed to TeacherScoreController
+    // These routes are commented out because the methods don't exist in TeacherScoreController
+    // TODO: Implement these methods or create a new FormTeacherController
+    // Route::prefix('teacher')->name('teacher.')->middleware('role:teacher')->group(function () {
+    //     Route::get('/form-teacher/dashboard', [FormTeacherController::class, 'dashboard'])->name('form-teacher.dashboard');
+    //     Route::get('/form-teacher/class/{class}/results', [FormTeacherController::class, 'classResults'])->name('form-teacher.class-results');
+    //     Route::get('/form-teacher/class/{class}/export', [FormTeacherController::class, 'exportResults'])->name('form-teacher.export-results');
+    //     
+    //     // Form Teacher - Add Students
+    //     Route::get('/form-teacher/class/{class}/students/add', [FormTeacherController::class, 'showAddStudents'])->name('form-teacher.add-students');
+    //     Route::post('/form-teacher/class/{class}/students', [FormTeacherController::class, 'storeStudentInClass'])->name('form-teacher.store-student');
+    //     Route::delete('/form-teacher/class/{class}/students/{student}', [FormTeacherController::class, 'removeStudentFromClass'])->name('form-teacher.remove-student');
+    //     
+    //     // Form Teacher - Compile Results
+    //     Route::get('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'compileResults'])->name('form-teacher.compile-results');
+    //     Route::get('/form-teacher/class/{class}/compile-results/form', [FormTeacherController::class, 'showCompileForm'])->name('form-teacher.compile-form');
+    //     Route::post('/form-teacher/class/{class}/compile-results', [FormTeacherController::class, 'storeCompiledResults'])->name('form-teacher.store-compiled-results');
+    //     
+    //     // Form Teacher - Report Cards
+    //     Route::get('/report-cards', [FormTeacherController::class, 'reportCards'])->name('report-cards');
+    //     Route::get('/report-cards/create', [FormTeacherController::class, 'showReportCardForm'])->name('report-card.create');
+    //     Route::get('/report-cards/student/{student}', [FormTeacherController::class, 'showReportCardForm'])->name('report-card.edit');
+    //     Route::post('/report-cards', [FormTeacherController::class, 'storeReportCard'])->name('report-card.store');
+    //     Route::get('/report-cards/{reportCard}/pdf', [FormTeacherController::class, 'generateReportCardPDF'])->name('report-card.pdf');
+    //     Route::delete('/report-cards/{reportCard}', [FormTeacherController::class, 'deleteReportCard'])->name('report-card.delete');
+    // });
 });
 
 // Temporary route to fix exam total marks

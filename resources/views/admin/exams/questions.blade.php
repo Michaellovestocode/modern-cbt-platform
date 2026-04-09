@@ -37,6 +37,7 @@
     </div>
 
     <!-- Add Question Form -->
+    @if($exam->questions->sum('marks') < $exam->total_marks)
     <div class="bg-white rounded-lg shadow p-6" x-data="{ questionType: 'multiple_choice' }">
         <h3 class="text-xl font-bold text-gray-800 mb-4">Add New Question</h3>
 
@@ -175,6 +176,7 @@
     </button>
 </form>
     </div>
+    @endif
 
     <!-- Questions List -->
     <div class="bg-white rounded-lg shadow">

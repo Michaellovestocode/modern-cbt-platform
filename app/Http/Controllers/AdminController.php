@@ -40,13 +40,28 @@ class AdminController extends Controller
                 }
             })
             ->latest()
-            ->take(10)
+            ->take(20) // Increased to get more attempts for grouping
             ->get();
+
+        // Group attempts by class
+        $groupedAttempts = collect();
+        foreach ($recentAttempts as $attempt) {
+            $className = $attempt->user->class ? $attempt->user->class->name : 'No Class';
+            if (!$groupedAttempts->has($className)) {
+                $groupedAttempts[$className] = collect();
+            }
+            $groupedAttempts[$className]->push($attempt);
+        }
+
+        // Sort classes and limit attempts per class to 5
+        $groupedAttempts = $groupedAttempts->map(function ($attempts) {
+            return $attempts->take(5);
+        })->sortKeys();
 
         // Check if user is a form teacher
         $isFormTeacher = $user->isTeacher() && \App\Models\FormTeacher::where('teacher_id', $user->id)->exists();
 
-        return view('admin.dashboard', compact('examsCount', 'studentsCount', 'recentExams', 'recentAttempts', 'isFormTeacher'));
+        return view('admin.dashboard', compact('examsCount', 'studentsCount', 'recentExams', 'groupedAttempts', 'isFormTeacher'));
     }
 
     public function exams()
@@ -245,6 +260,12 @@ public function deleteExam($examId)
    public function storeQuestion(Request $request, $examId)
 {
     $exam = Exam::findOrFail($examId);
+
+    // Check if exam is already complete
+    if ($exam->questions->sum('marks') >= $exam->total_marks) {
+        return redirect()->route('admin.exam.questions', $exam->id)
+            ->with('error', 'Cannot add questions to a completed exam.');
+    }
 
     $request->validate([
         'question_text' => 'required|string',
@@ -494,7 +515,7 @@ public function deleteExam($examId)
     // Teacher Management
 public function teachers()
 {
-    $teachers = User::where('role', 'teacher')->with('exams')->get();
+    $teachers = User::where('role', 'teacher')->with('exams', 'subjects')->get();
     return view('admin.teachers.index', compact('teachers'));
 }
 
@@ -617,15 +638,27 @@ public function storeStudent(Request $request)
         'registration_number' => 'required|string|unique:users,registration_number',
         'class_id' => 'required|exists:school_classes,id',
         'password' => 'required|string|min:6',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+        'date_of_birth' => 'nullable|date',
+        'parent_phone_number' => 'nullable|string|max:20',
     ]);
 
-    User::create([
+    $data = [
         'name' => $validated['name'],
         'registration_number' => $validated['registration_number'],
         'class_id' => $validated['class_id'],
         'password' => Hash::make($validated['password']),
         'role' => 'student',
-    ]);
+        'date_of_birth' => $validated['date_of_birth'] ?? null,
+        'parent_phone_number' => $validated['parent_phone_number'] ?? null,
+    ];
+
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('photos', 'public');
+        $data['photo'] = $photoPath;
+    }
+
+    User::create($data);
 
     return redirect()->route('admin.students')->with('success', 'Student added successfully!');
 }
@@ -646,13 +679,25 @@ public function updateStudent(Request $request, $studentId)
         'registration_number' => 'required|string|unique:users,registration_number,' . $studentId,
         'class_id' => 'required|exists:school_classes,id',
         'password' => 'nullable|string|min:6',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+        'date_of_birth' => 'nullable|date',
+        'parent_phone_number' => 'nullable|string|max:20',
     ]);
 
-    $student->update([
+    $data = [
         'name' => $validated['name'],
         'registration_number' => $validated['registration_number'],
         'class_id' => $validated['class_id'],
-    ]);
+        'date_of_birth' => $validated['date_of_birth'] ?? null,
+        'parent_phone_number' => $validated['parent_phone_number'] ?? null,
+    ];
+
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('photos', 'public');
+        $data['photo'] = $photoPath;
+    }
+
+    $student->update($data);
 
     if ($request->filled('password')) {
         $student->update(['password' => Hash::make($validated['password'])]);

@@ -13,6 +13,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Seed sessions and terms first
+        $this->call(SessionSeeder::class);
+
+        // Seed subjects
+        $this->call(SubjectSeeder::class);
+
         // Create Classes
        // Create Classes (Year 7 to Year 12)
 $year7 = SchoolClass::create([

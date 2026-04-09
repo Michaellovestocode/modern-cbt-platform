@@ -61,6 +61,6 @@ class FormTeacher extends Model
      */
     public function examAttempts()
     {
-        return ExamAttempt::whereIn('student_id', $this->classStudents()->pluck('id'))->get();
+        return ExamAttempt::whereIn('user_id', $this->classStudents()->pluck('id'))->get();
     }
 }

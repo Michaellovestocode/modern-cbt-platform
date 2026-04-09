@@ -87,7 +87,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold"><?php echo e($recentAttempts->count()); ?></div>
+                    <div class="text-4xl font-bold"><?php echo e($groupedAttempts->flatten()->count()); ?></div>
                 </div>
             </div>
             <div class="text-white/90 font-semibold text-lg">Recent Attempts</div>
@@ -247,85 +247,97 @@
         </div>
     </div>
 
-    <!-- Recent Student Attempts Table -->
+    <!-- Recent Student Attempts Grouped by Class -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div class="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-100">
             <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                <span class="mr-2">📊</span> Recent Student Attempts
+                <span class="mr-2">📊</span> Recent Student Attempts by Class
             </h3>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Student</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Exam</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Score</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php $__empty_1 = true; $__currentLoopData = $recentAttempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="font-semibold text-gray-800"><?php echo e($attempt->user->name); ?></div>
-                            <div class="text-xs text-gray-500"><?php echo e($attempt->user->registration_number); ?></div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="font-medium text-gray-800"><?php echo e($attempt->exam->title); ?></div>
-                            <div class="text-xs text-gray-500"><?php echo e($attempt->exam->subject); ?></div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <?php if($attempt->status === 'graded'): ?>
-                            <span class="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-semibold">✓ Graded</span>
-                            <?php elseif($attempt->status === 'submitted'): ?>
-                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-semibold">⏳ Pending</span>
-                            <?php else: ?>
-                            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-xs rounded-full font-semibold">⚪ In Progress</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <?php if($attempt->total_score !== null): ?>
-                            <span class="font-bold text-gray-800"><?php echo e($attempt->total_score); ?></span>
-                            <?php else: ?>
-                            <span class="text-gray-400">-</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            <?php echo e($attempt->created_at->format('d M Y')); ?>
-
-                            <div class="text-xs text-gray-400"><?php echo e($attempt->created_at->format('H:i')); ?></div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <?php if($attempt->status === 'submitted'): ?>
-                            <a href="<?php echo e(route('admin.attempt.grade', $attempt->id)); ?>" 
-                               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold inline-flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        <div class="p-6">
+            <?php if($groupedAttempts->isNotEmpty()): ?>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <?php $__currentLoopData = $groupedAttempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $className => $attempts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3">
+                            <h4 class="text-white font-bold text-lg flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
-                                Grade
-                            </a>
-                            <?php else: ?>
-                            <a href="<?php echo e(route('admin.exam.results', $attempt->exam_id)); ?>" 
-                               class="text-gray-600 hover:text-gray-800 font-semibold text-sm">
-                                View →
-                            </a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
-                            <div class="text-5xl mb-3">📝</div>
-                            <p class="text-gray-500 text-lg">No attempts yet</p>
-                            <p class="text-gray-400 text-sm mt-1">Student submissions will appear here</p>
-                        </td>
-                    </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                                <?php echo e($className); ?>
+
+                                <span class="ml-auto bg-white/20 text-white text-sm px-2 py-1 rounded-full">
+                                    <?php echo e($attempts->count()); ?>
+
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <?php $__currentLoopData = $attempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex-1">
+                                        <div class="font-semibold text-gray-800 text-sm"><?php echo e($attempt->user->name); ?></div>
+                                        <div class="text-xs text-gray-500"><?php echo e($attempt->user->registration_number); ?></div>
+                                    </div>
+                                    <div class="text-right">
+                                        <?php if($attempt->status === 'graded'): ?>
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-semibold">✓ Graded</span>
+                                        <?php elseif($attempt->status === 'submitted'): ?>
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-semibold">⏳ Pending</span>
+                                        <?php else: ?>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full font-semibold">⚪ In Progress</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-600 mb-2">
+                                    <div class="font-medium"><?php echo e($attempt->exam->title); ?></div>
+                                    <div class="text-gray-500"><?php echo e($attempt->exam->subject); ?></div>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <div>
+                                        <?php if($attempt->total_score !== null): ?>
+                                        <span class="font-bold text-gray-800"><?php echo e($attempt->total_score); ?></span>
+                                        <span class="text-gray-500">marks</span>
+                                        <?php else: ?>
+                                        <span class="text-gray-400">-</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="text-gray-500">
+                                        <?php echo e($attempt->created_at->format('d M')); ?>
+
+                                        <div class="text-gray-400"><?php echo e($attempt->created_at->format('H:i')); ?></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <?php if($attempt->status === 'submitted'): ?>
+                                    <a href="<?php echo e(route('admin.attempt.grade', $attempt->id)); ?>" 
+                                       class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold inline-flex items-center w-full justify-center">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                        Grade
+                                    </a>
+                                    <?php else: ?>
+                                    <a href="<?php echo e(route('admin.exam.results', $attempt->exam_id)); ?>" 
+                                       class="text-blue-600 hover:text-blue-800 font-semibold text-xs text-center block">
+                                        View Results →
+                                    </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            <?php else: ?>
+                <div class="text-center py-12">
+                    <div class="text-5xl mb-3">📝</div>
+                    <p class="text-gray-500 text-lg">No attempts yet</p>
+                    <p class="text-gray-400 text-sm mt-1">Student submissions will appear here</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
