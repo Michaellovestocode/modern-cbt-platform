@@ -44,26 +44,26 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col gap-2 pt-4 border-t">
-                    <a href="{{ route('teacher.form-teacher.class-results', $item['class']->id) }}" 
+                    <a href="{{ route('teacher.scores.dashboard') }}" 
                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-semibold text-center transition">
-                        📊 View Results
+                        📊 Go to Score Entry
                     </a>
-                    <a href="{{ route('teacher.form-teacher.compile-results', $item['class']->id) }}" 
+                    <a href="{{ route('teacher.scores.dashboard') }}" 
                        class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded font-semibold text-center transition">
-                        📝 Compile Results
+                        📝 Manage Scores
                     </a>
-                    <a href="{{ route('teacher.form-teacher.add-students', $item['class']->id) }}" 
+                    <a href="{{ route('teacher.scores.dashboard') }}" 
                        class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-semibold text-center transition">
                         👥 Manage Students
                     </a>
-                    <a href="{{ route('teacher.form-teacher.export-results', $item['class']->id) }}" 
+                    <a href="{{ route('teacher.scores.dashboard') }}" 
                        class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold text-center transition">
-                        📥 Export PDF
+                        📥 View Scores
                     </a>
                     @if($data->count() > 0)
-                    <a href="{{ route('teacher.report-cards') }}" 
+                    <a href="{{ route('teacher.scores.dashboard') }}" 
                        class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold text-center transition">
-                        📄 Report Cards
+                        📄 Teacher Dashboard
                     </a>
                     @endif
                 </div>

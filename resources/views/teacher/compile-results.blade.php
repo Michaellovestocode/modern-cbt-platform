@@ -12,14 +12,17 @@
                 <p class="text-gray-600">View and manage exam results for {{ $class->name }}</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('teacher.form-teacher.compile-form', $class->id) }}"
+                <!-- <a href="{{ route('teacher.form-teacher.compile-form', $class->id) }}"
                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
                     Manually Enter Result
-                </a>
-                <a href="{{ route('teacher.form-teacher.dashboard') }}"
+                </a> -->
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-6 py-3 rounded-lg font-semibold">
+                    ⚠️ This feature is temporarily unavailable. Use Score Entry to record scores.
+                </div>
+                <a href="{{ route('teacher.scores.dashboard') }}"
                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -39,7 +42,7 @@
                 <div>
                     <h3 class="text-lg font-semibold text-yellow-800">No Students Found</h3>
                     <p class="text-yellow-700">No students have been added to this class yet.</p>
-                    <a href="{{ route('teacher.form-teacher.add-students', $class->id) }}"
+                    <a href="{{ route('teacher.scores.dashboard') }}"
                        class="text-yellow-800 font-semibold underline hover:text-yellow-900 mt-2 inline-block">
                         Add students now →
                     </a>

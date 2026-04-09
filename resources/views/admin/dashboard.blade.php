@@ -12,9 +12,9 @@
                 <h3 class="text-2xl font-bold mb-2">Welcome, Form Teacher! 👨‍🏫</h3>
                 <p class="text-white/90">You are assigned as a form teacher. Access your class dashboard to manage students and compile results.</p>
             </div>
-            <a href="{{ route('teacher.form-teacher.dashboard') }}" 
+            <a href="{{ route('teacher.scores.dashboard') }}" 
                class="bg-white text-indigo-600 hover:bg-indigo-50 px-8 py-3 rounded-lg font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap ml-4">
-                📚 Go to Form Teacher Dashboard
+                📚 Go to Score Entry Dashboard
             </a>
         </div>
     </div>
