@@ -592,7 +592,7 @@ public function classes()
 public function storeClass(Request $request)
 {
     $validated = $request->validate([
-        'name' => 'required|string|max:255|unique:school_classes,name',
+        'name' => 'required|string|max:255',
         'description' => 'nullable|string',
     ]);
 
@@ -622,7 +622,8 @@ public function students()
         ->with('class')
         ->orderBy('registration_number')
         ->get();
-    return view('admin.students.index', compact('students'));
+    $classes = SchoolClass::all();
+    return view('admin.students.index', compact('students', 'classes'));
 }
 
 public function createStudent()

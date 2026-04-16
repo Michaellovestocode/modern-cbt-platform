@@ -18,9 +18,8 @@ class NigerianReportCardController extends Controller
     
     public function index()
     {
-        $activeSes
 
-sion = Session::getActive();
+$activeSession = Session::getActive();
         $activeTerm = Term::getActive();
         
         $reportCards = ReportCard::with(['student', 'session', 'term', 'class'])
