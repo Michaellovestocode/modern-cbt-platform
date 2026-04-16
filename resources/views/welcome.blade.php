@@ -148,7 +148,7 @@
 ════════════════════════════════════════════ -->
 <div class="bg-gradient-to-r from-blue-700 to-green-600 text-white text-sm py-2 ticker-wrap">
     <div class="ticker-track gap-x-16">
-        <span class="px-6">📢 2025/2026 Admission is NOW OPEN — Apply Today!</span>
+        <span class="px-6">📢 2026/2027 Admission is NOW OPEN — Apply Today!</span>
         <span class="px-6">🏆 Cambridge Students Win State Science Olympiad 2025</span>
         <span class="px-6">📅 Next PTA Meeting: Saturday, 19 April 2026</span>
         <span class="px-6">🎓 WAEC Registration Deadline: 30 April 2026</span>
@@ -241,7 +241,7 @@
             <div class="text-center lg:text-left fade-in-up">
                 <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-green-100 border-2 border-blue-200 rounded-full px-5 py-2 mb-6 sm:mb-8">
                     <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-gray-800 text-sm font-bold">🇳🇬 Top 5 Schools in Lagos</span>
+                    <span class="text-gray-800 text-sm font-bold">🇳🇬 Best School in Warri</span>
                 </div>
 
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
@@ -257,7 +257,7 @@
                         <span>📚 Apply Now</span>
                     </a>
                     <a href="/login" class="bg-white border-2 border-gray-200 text-gray-800 px-8 py-4 rounded-full font-bold text-lg hover:border-blue-600 hover:text-blue-600 transition flex items-center justify-center space-x-2">
-                        <span>🎓 Student Login</span>
+                        <span>🎓Login</span>
                     </a>
                 </div>
             </div>
@@ -267,14 +267,14 @@
                 <div class="grid grid-cols-2 gap-4 sm:gap-6">
                     <div class="flex justify-end">
                         <div class="bg-gradient-to-br from-purple-400 to-purple-600 p-1 shadow-2xl card-hover" style="border-radius:60% 40% 60% 50%">
-                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&q=80" alt="Student" class="student-circle bg-purple-100">
+                            <img src="{{ asset('images/heropage3.png') }}"  alt="Student" class="student-circle bg-purple-100">
                         </div>
                     </div>
                     <div class="mt-8 sm:mt-16">
-                        <div class="bg-gradient-to-br from-cyan-400 to-cyan-600 p-1 shadow-2xl card-hover" style="border-radius:40% 60% 50% 60%">
-                            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300&q=80" alt="Student" class="student-circle bg-cyan-100">
-                        </div>
-                    </div>
+    <div class="bg-gradient-to-br from-cyan-400 to-cyan-600 p-1 shadow-2xl card-hover" style="border-radius:40% 60% 50% 60%">
+        <img src="{{ asset('images/herobox1.png') }}" alt="Student" class="student-circle bg-cyan-100">
+    </div>
+</div>
                     <div class="flex justify-end -mt-4 sm:-mt-8">
                         <div class="bg-gradient-to-br from-yellow-400 to-orange-500 p-1 shadow-2xl card-hover" style="border-radius:50% 60% 40% 60%">
                             <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=300&q=80" alt="Student" class="student-circle bg-yellow-100">
@@ -282,7 +282,8 @@
                     </div>
                     <div class="mt-0 sm:mt-4">
                         <div class="bg-gradient-to-br from-pink-400 to-pink-600 p-1 shadow-2xl card-hover" style="border-radius:60% 50% 60% 40%">
-                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=300&q=80" alt="Student" class="student-circle bg-pink-100">
+                            <img src="{{ asset('images/heropage2.png') }}" alt="Student" class="student-circle bg-pink-100">
+        
                         </div>
                     </div>
                 </div>
@@ -324,7 +325,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-black mb-3">High School</h3>
+                <h3 class="text-2xl font-black mb-3">Secondary School</h3>
                 <p class="text-green-100 text-sm leading-relaxed mb-4">Preparing students for higher education and career success.</p>
                 <div class="text-xs font-semibold text-green-200 mb-4">JSS &amp; SSS</div>
                 <a href="#contact" class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white font-bold px-4 py-2 rounded-full transition">Learn More →</a>
@@ -368,7 +369,7 @@
             <!-- Image -->
             <div class="order-2 lg:order-1 fade-in-up">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80" alt="Classroom" class="rounded-3xl shadow-2xl w-full">
+                    <img src="{{ asset('images/excursion1.jpg') }}" alt="Classroom" class="rounded-3xl shadow-2xl w-full">
                     <div class="absolute -bottom-6 -right-6 bg-gradient-to-br from-yellow-400 to-orange-500 p-6 rounded-2xl shadow-2xl">
                         <div class="text-white">
                             <div class="text-4xl font-black mb-1">98%</div>
@@ -431,10 +432,88 @@
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17h8M8 17v-2a4 4 0 014-4h0a4 4 0 014 4v2M3 12l2-7h14l2 7M5 12h14"/></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-900 mb-1">Safe School Bus Service</h4>
-                            <p class="text-sm text-gray-600">Reliable, GPS-tracked transportation covering major Lagos routes</p>
+                            <h4 class="font-bold text-gray-900 mb-1">Boarding Facilities</h4>
+                            <p class="text-sm text-gray-600">Safe and comfortable accommodation for students</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     STAFF SECTION  (NEW)
+════════════════════════════════════════════ -->
+<section class="py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 fade-in-up">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">Meet Our Expert Team</h2>
+            <p class="text-lg sm:text-xl text-gray-600">Dedicated educators and professionals committed to nurturing every student's potential</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <!-- Staff Member 1 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up">
+                <div class="relative">
+    <img src="{{ asset('images/director.jpg') }}" alt="Director" class="w-full h-64 object-cover">
+    
+    <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+        Director
+    </div>
+</div>
+                <div class="p-6 text-center">
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Dns. Mrs. Precious Awe</h3>
+                    <p class="text-blue-600 font-semibold text-sm mb-3">School Director</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">20+ years of educational leadership, PhD in Educational Administration</p>
+                </div>
+            </div>
+
+            <!-- Staff Member 2 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.1s">
+                <div class="relative">
+    <img src="{{ asset('images/principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    
+    <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+        Principal
+    </div>
+</div>
+                <div class="p-6 text-center">
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Mr. Eziyi John</h3>
+                    <p class="text-green-600 font-semibold text-sm mb-3">Principal</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">MSc Mathematics, WAEC examiner, 15 years teaching experience</p>
+                </div>
+            </div>
+
+            <!-- Staff Member 3 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.2s">
+                <div class="relative">
+    <img src="{{ asset('images/principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    
+    <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+        Administrator
+    </div>
+</div>
+                <div class="p-6 text-center">
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Mrs Atibaka Toritseju Louisa</h3>
+                    <p class="text-purple-600 font-semibold text-sm mb-3">Administrator</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">BSc Biology/Chemistry, Laboratory specialist, STEM enthusiast</p>
+                </div>
+            </div>
+
+            <!-- Staff Member 4 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.3s">
+                <div class="relative">
+    <img src="{{ asset('images/v-principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    
+    <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+        Vice Principal
+    </div>
+</div>
+                <div class="p-6 text-center">
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Mr. Awonuga Daniel Olalekan</h3>
+                    <p class="text-orange-600 font-semibold text-sm mb-3">Vice Principal</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">MA English Literature, Published author, Drama club coordinator</p>
                 </div>
             </div>
         </div>
@@ -448,11 +527,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div class="text-center fade-in-up">
-                <div class="text-5xl sm:text-6xl font-black text-white mb-2 counter" data-target="5000">0</div>
+                <div class="text-5xl sm:text-6xl font-black text-white mb-2 counter" data-target="500">0</div>
                 <div class="text-white/90 font-semibold text-sm sm:text-base">Happy Students</div>
             </div>
             <div class="text-center fade-in-up" style="transition-delay:.1s">
-                <div class="text-5xl sm:text-6xl font-black text-white mb-2 counter" data-target="120">0</div>
+                <div class="text-5xl sm:text-6xl font-black text-white mb-2 counter" data-target="80">0</div>
                 <div class="text-white/90 font-semibold text-sm sm:text-base">Expert Teachers</div>
             </div>
             <div class="text-center fade-in-up" style="transition-delay:.2s">
@@ -480,10 +559,10 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Card 1 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100">
-                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=500&q=80" alt="Science Olympiad" class="w-full h-48 object-cover">
+                <img src="{{ asset('images/achieve.jpg') }}" alt="Science Olympiad" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full mb-3">🏆 Achievement</span>
-                    <h3 class="font-black text-gray-900 text-lg mb-2">Students Win Lagos Science Olympiad 2025</h3>
+                    <h3 class="font-black text-gray-900 text-lg mb-2">Students Win World Hydrography Competition 2025</h3>
                     <p class="text-sm text-gray-500 mb-4">Our JSS3 team clinched first place in this year's state-wide science competition, beating 40 schools.</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span>📅 March 28, 2025</span>
@@ -494,7 +573,7 @@
 
             <!-- Card 2 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100" style="transition-delay:.1s">
-                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" alt="Admission" class="w-full h-48 object-cover">
+                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" alt="Admission" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full mb-3">📋 Admission</span>
                     <h3 class="font-black text-gray-900 text-lg mb-2">2025/2026 Admission Now Open</h3>
@@ -508,14 +587,14 @@
 
             <!-- Card 3 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100" style="transition-delay:.2s">
-                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500&q=80" alt="CBT Mock Exams" class="w-full h-48 object-cover">
+                <img src="{{ asset('images/club1.jpg') }}" alt="CBT Mock Exams" class="w-full h-60 object-cover">
                 <div class="p-6">
-                    <span class="inline-block text-xs font-bold bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-3">💻 Exams</span>
-                    <h3 class="font-black text-gray-900 text-lg mb-2">CBT Mock Exams Begin April 14</h3>
-                    <p class="text-sm text-gray-500 mb-4">WAEC &amp; NECO preparatory mock exams kick off on the CBT portal. All SS3 students must register.</p>
+                    <span class="inline-block text-xs font-bold bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-3">🏇 Clubs</span>
+                    <h3 class="font-black text-gray-900 text-lg mb-2">Students Activity Center</h3>
+                    <p class="text-sm text-gray-500 mb-4">Join our vibrant student activities and clubs to enhance your school experience.</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span>📅 April 10, 2026</span>
-                        <a href="/login" class="text-blue-600 font-semibold hover:underline">Go to portal</a>
+                        <a href="#" class="text-blue-600 font-semibold hover:underline">Go to portal</a>
                     </div>
                 </div>
             </article>
@@ -602,10 +681,10 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)">
-                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80" alt="Students" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="{{ asset('images/sport.jpg') }}" alt="Students" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.05s">
-                <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80" alt="Classroom" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="{{ asset('images/school life1.jpg') }}" alt="Classroom" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.1s">
                 <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80" alt="Learning" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
@@ -1052,3 +1131,5 @@
 </script>
 </body>
 </html>
+
+
