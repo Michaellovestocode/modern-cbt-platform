@@ -277,7 +277,7 @@
 </div>
                     <div class="flex justify-end -mt-4 sm:-mt-8">
                         <div class="bg-gradient-to-br from-yellow-400 to-orange-500 p-1 shadow-2xl card-hover" style="border-radius:50% 60% 40% 60%">
-                            <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=300&q=80" alt="Student" class="student-circle bg-yellow-100">
+                            <img src="<?php echo e(asset('images/clear.jfif')); ?>" alt="Student" class="student-circle bg-yellow-100">
                         </div>
                     </div>
                     <div class="mt-0 sm:mt-4">
@@ -456,7 +456,7 @@
             <!-- Staff Member 1 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up">
                 <div class="relative">
-    <img src="<?php echo e(asset('images/director.jpg')); ?>" alt="Director" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/Director.jpg')); ?>" alt="Director" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Director
@@ -488,7 +488,7 @@
             <!-- Staff Member 3 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.2s">
                 <div class="relative">
-    <img src="<?php echo e(asset('images/principal.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/admin1.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Administrator
@@ -504,7 +504,7 @@
             <!-- Staff Member 4 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.3s">
                 <div class="relative">
-    <img src="<?php echo e(asset('images/v-principal.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/Vice-Principal1.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Vice Principal
@@ -576,7 +576,7 @@
                 <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" alt="Admission" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full mb-3">📋 Admission</span>
-                    <h3 class="font-black text-gray-900 text-lg mb-2">2025/2026 Admission Now Open</h3>
+                    <h3 class="font-black text-gray-900 text-lg mb-2">2026/2027 Admission Now Open</h3>
                     <p class="text-sm text-gray-500 mb-4">Applications for all levels are now being accepted. Secure your child's spot before the deadline.</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span>📅 April 1, 2026</span>
@@ -687,10 +687,10 @@
                 <img src="<?php echo e(asset('images/school life1.jpg')); ?>" alt="Classroom" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.1s">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80" alt="Learning" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/boycomputer.jpg')); ?>" alt="Learning" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up md:col-span-2" onclick="openLightbox(this)" style="transition-delay:.15s">
-                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Technology" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/lifee.jpg')); ?>" alt="Technology" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.2s">
                 <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&q=80" alt="Group learning" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
