@@ -12,9 +12,9 @@
                 <h3 class="text-2xl font-bold mb-2">Welcome, Form Teacher! 👨‍🏫</h3>
                 <p class="text-white/90">You are assigned as a form teacher. Access your class dashboard to manage students and compile results.</p>
             </div>
-            <a href="<?php echo e(route('teacher.form-teacher.dashboard')); ?>" 
+            <a href="<?php echo e(route('teacher.scores.dashboard')); ?>" 
                class="bg-white text-indigo-600 hover:bg-indigo-50 px-8 py-3 rounded-lg font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap ml-4">
-                📚 Go to Form Teacher Dashboard
+                📚 Go to Score Entry Dashboard
             </a>
         </div>
     </div>
@@ -191,19 +191,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C6.5 6.253 2 10.998 2 17.25m20-11.002c0 5.159-4.592 9.513-10 9.513m10-9.513c5.05 0 9.233 4.233 10 9.513M12 19.25m0 0c-5.408 0-10-4.354-10-9.513"></path>
                         </svg>
                         Manage Subjects
-                    </span>
-                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
-
-                <a href="<?php echo e(route('admin.form-teachers.index')); ?>" 
-                   class="flex items-center justify-between bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all group">
-                    <span class="flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                        </svg>
-                        Manage Form Teachers
                     </span>
                     <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

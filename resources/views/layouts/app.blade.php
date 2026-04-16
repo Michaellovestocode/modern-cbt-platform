@@ -20,6 +20,13 @@
                 <div class="flex items-center space-x-4">
                     <span class="text-sm">{{ auth()->user()->name }}</span>
                     <span class="text-xs bg-green-800 px-2 py-1 rounded">{{ ucfirst(auth()->user()->role) }}</span>
+                    @php
+                        $dashboardRoute = auth()->user()->isStudent() ? 'student.dashboard' : 'admin.dashboard';
+                    @endphp
+                    <a href="{{ route($dashboardRoute) }}" 
+                       class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">
+                        Dashboard
+                    </a>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm">

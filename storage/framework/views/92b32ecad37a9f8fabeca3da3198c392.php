@@ -267,12 +267,12 @@
                 <div class="grid grid-cols-2 gap-4 sm:gap-6">
                     <div class="flex justify-end">
                         <div class="bg-gradient-to-br from-purple-400 to-purple-600 p-1 shadow-2xl card-hover" style="border-radius:60% 40% 60% 50%">
-                            <img src="{{ asset('images/heropage3.png') }}"  alt="Student" class="student-circle bg-purple-100">
+                            <img src="<?php echo e(asset('images/heropage3.png')); ?>"  alt="Student" class="student-circle bg-purple-100">
                         </div>
                     </div>
                     <div class="mt-8 sm:mt-16">
     <div class="bg-gradient-to-br from-cyan-400 to-cyan-600 p-1 shadow-2xl card-hover" style="border-radius:40% 60% 50% 60%">
-        <img src="{{ asset('images/herobox1.png') }}" alt="Student" class="student-circle bg-cyan-100">
+        <img src="<?php echo e(asset('images/herobox1.png')); ?>" alt="Student" class="student-circle bg-cyan-100">
     </div>
 </div>
                     <div class="flex justify-end -mt-4 sm:-mt-8">
@@ -282,7 +282,7 @@
                     </div>
                     <div class="mt-0 sm:mt-4">
                         <div class="bg-gradient-to-br from-pink-400 to-pink-600 p-1 shadow-2xl card-hover" style="border-radius:60% 50% 60% 40%">
-                            <img src="{{ asset('images/heropage2.png') }}" alt="Student" class="student-circle bg-pink-100">
+                            <img src="<?php echo e(asset('images/heropage2.png')); ?>" alt="Student" class="student-circle bg-pink-100">
         
                         </div>
                     </div>
@@ -369,7 +369,7 @@
             <!-- Image -->
             <div class="order-2 lg:order-1 fade-in-up">
                 <div class="relative">
-                    <img src="{{ asset('images/excursion1.jpg') }}" alt="Classroom" class="rounded-3xl shadow-2xl w-full">
+                    <img src="<?php echo e(asset('images/excursion1.jpg')); ?>" alt="Classroom" class="rounded-3xl shadow-2xl w-full">
                     <div class="absolute -bottom-6 -right-6 bg-gradient-to-br from-yellow-400 to-orange-500 p-6 rounded-2xl shadow-2xl">
                         <div class="text-white">
                             <div class="text-4xl font-black mb-1">98%</div>
@@ -456,7 +456,7 @@
             <!-- Staff Member 1 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up">
                 <div class="relative">
-    <img src="{{ asset('images/director.jpg') }}" alt="Director" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/director.jpg')); ?>" alt="Director" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Director
@@ -472,7 +472,7 @@
             <!-- Staff Member 2 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.1s">
                 <div class="relative">
-    <img src="{{ asset('images/principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/principal.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Principal
@@ -488,7 +488,7 @@
             <!-- Staff Member 3 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.2s">
                 <div class="relative">
-    <img src="{{ asset('images/principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/principal.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Administrator
@@ -504,7 +504,7 @@
             <!-- Staff Member 4 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.3s">
                 <div class="relative">
-    <img src="{{ asset('images/v-principal.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/v-principal.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Vice Principal
@@ -559,7 +559,7 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Card 1 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100">
-                <img src="{{ asset('images/achieve.jpg') }}" alt="Science Olympiad" class="w-full h-60 object-cover">
+                <img src="<?php echo e(asset('images/achieve.jpg')); ?>" alt="Science Olympiad" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full mb-3">🏆 Achievement</span>
                     <h3 class="font-black text-gray-900 text-lg mb-2">Students Win World Hydrography Competition 2025</h3>
@@ -587,7 +587,7 @@
 
             <!-- Card 3 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100" style="transition-delay:.2s">
-                <img src="{{ asset('images/club1.jpg') }}" alt="CBT Mock Exams" class="w-full h-60 object-cover">
+                <img src="<?php echo e(asset('images/club1.jpg')); ?>" alt="CBT Mock Exams" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-3">🏇 Clubs</span>
                     <h3 class="font-black text-gray-900 text-lg mb-2">Students Activity Center</h3>
@@ -681,10 +681,10 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)">
-                <img src="{{ asset('images/sport.jpg') }}" alt="Students" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/sport.jpg')); ?>" alt="Students" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.05s">
-                <img src="{{ asset('images/school life1.jpg') }}" alt="Classroom" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/school life1.jpg')); ?>" alt="Classroom" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
             </div>
             <div class="card-hover rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-up" onclick="openLightbox(this)" style="transition-delay:.1s">
                 <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80" alt="Learning" class="w-full h-48 sm:h-64 object-cover hover:scale-105 transition duration-500">
@@ -1133,3 +1133,4 @@
 </html>
 
 
+<?php /**PATH C:\laragon\www\modern-cbt-platform-for-highschool\resources\views/welcome.blade.php ENDPATH**/ ?>
