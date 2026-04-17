@@ -504,7 +504,7 @@
             <!-- Staff Member 4 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.3s">
                 <div class="relative">
-    <img src="{{ asset('images/Vice-Principal1.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
+    <img src="{{ asset('images/vice-principal1.jpg') }}" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Vice Principal
