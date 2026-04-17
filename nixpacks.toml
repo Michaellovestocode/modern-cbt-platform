@@ -1,29 +1,8 @@
 [phases.setup]
-nixPkgs = ['php82', 'php82Packages.composer']
+nixPkgs = ["php82", "php82Packages.composer"]
 
 [phases.build]
-cmds = [
-    'composer install --optimize-autoloader --no-dev',
-    'php artisan config:cache',
-    'php artisan route:cache',
-    'php artisan view:cache'
-]
+cmds = ["composer install --no-dev --optimize-autoloader"]
 
 [start]
-cmd = 'php artisan serve --host=0.0.0.0 --port=${PORT:-8080}'
-```
-
-**4. Update `.gitignore` - Make sure these are there:**
-```
-/node_modules
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
-.env
-.env.backup
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
