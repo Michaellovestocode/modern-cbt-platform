@@ -624,7 +624,7 @@
                         <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-black">A</div>
                         <div class="text-left">
                             <div class="font-bold text-gray-900">Mrs Adunola Balogun</div>
-                            <div class="text-sm text-gray-500">Parent, JSS2 Student · Lekki</div>
+                            <div class="text-sm text-gray-500">Parent, JSS2 Student · Warri</div>
                         </div>
                         <div class="flex text-yellow-400 text-sm ml-2">★★★★★</div>
                     </div>
