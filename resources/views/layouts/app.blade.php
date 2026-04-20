@@ -72,7 +72,7 @@
                     @php
                         $dashboardRoute = auth()->user()->isStudent() ? 'student.dashboard' : 'admin.dashboard';
                     @endphp
-                    <a href="{{ route($dashboardRoute) }}" class="px-4 py-2 text-sm font-semibold text-white/90 hover:text-white transition">
+                    <a href="{{ route($dashboardRoute) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition">
                         📊 Dashboard
                     </a>
                 </div>

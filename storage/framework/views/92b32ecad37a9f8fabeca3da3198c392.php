@@ -194,7 +194,7 @@
             <!-- Logo -->
             <div class="flex items-center space-x-3">
                 <div class="w-14 h-14 bg-gradient-to-br from-blue-600 via-yellow-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
-                    <span class="text-white font-black text-2xl -rotate-3">C</span>
+                    <span class="text-white font-black text-2xl -rotate-1"><img src="<?php echo e(asset('images/schoollogo.jpg')); ?>" alt="Vice Principal" class="w-full h-full object-cover rounded-2xl"></span>
                 </div>
                 <div>
                     <h1 class="text-xl font-black text-gray-900">Cambridge</h1>
@@ -452,8 +452,28 @@
             <p class="text-lg sm:text-xl text-gray-600">Dedicated educators and professionals committed to nurturing every student's potential</p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
             <!-- Staff Member 1 -->
+
+
+             <!-- Staff Member 1 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up">
+                <div class="relative">
+    <img src="<?php echo e(asset('images/Director2.jpg')); ?>" alt="Director" class="w-full h-64 object-cover">
+    
+    <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+        Director
+    </div>
+</div>
+                <div class="p-6 text-center">
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Mrs. Precious Awe</h3>
+                    <p class="text-blue-600 font-semibold text-sm mb-3">School Director</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">20+ years of educational leadership, PhD in Educational Administration</p>
+                </div>
+            </div>
+
+
+
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up">
                 <div class="relative">
     <img src="<?php echo e(asset('images/Director.jpg')); ?>" alt="Director" class="w-full h-64 object-cover">
@@ -463,7 +483,7 @@
     </div>
 </div>
                 <div class="p-6 text-center">
-                    <h3 class="font-black text-gray-900 text-lg mb-1">Dns. Mrs. Precious Awe</h3>
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Mrs. Precious Awe</h3>
                     <p class="text-blue-600 font-semibold text-sm mb-3">School Director</p>
                     <p class="text-gray-600 text-sm leading-relaxed">20+ years of educational leadership, PhD in Educational Administration</p>
                 </div>
@@ -504,7 +524,7 @@
             <!-- Staff Member 4 -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up" style="transition-delay:.3s">
                 <div class="relative">
-    <img src="<?php echo e(asset('images/Vice-Principal1.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
+    <img src="<?php echo e(asset('images/vice-principal1.jpg')); ?>" alt="Principal" class="w-full h-64 object-cover">
     
     <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
         Vice Principal
@@ -573,7 +593,7 @@
 
             <!-- Card 2 -->
             <article class="bg-white rounded-3xl shadow-lg overflow-hidden card-hover fade-in-up border border-gray-100" style="transition-delay:.1s">
-                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" alt="Admission" class="w-full h-60 object-cover">
+                <img src="<?php echo e(asset('images/admission.jpg')); ?>" alt="Admission" class="w-full h-60 object-cover">
                 <div class="p-6">
                     <span class="inline-block text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full mb-3">📋 Admission</span>
                     <h3 class="font-black text-gray-900 text-lg mb-2">2026/2027 Admission Now Open</h3>
@@ -741,7 +761,7 @@
             <!-- FAQ 3 -->
             <div class="bg-white rounded-2xl shadow-md overflow-hidden">
                 <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold text-gray-900 hover:bg-gray-50 transition">
-                    <span>Is there a school bus for students?</span>
+                    <span>Is there a school boarding facility for students?</span>
                     <svg class="w-5 h-5 text-blue-600 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div class="faq-body px-6">
@@ -812,7 +832,7 @@
                         <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-xl">📍</div>
                         <div>
                             <div class="font-bold text-gray-900">Address</div>
-                            <div class="text-gray-500 text-sm">Lagos, Nigeria</div>
+                            <div class="text-gray-500 text-sm">Delta, Nigeria</div>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">

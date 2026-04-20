@@ -69,10 +69,10 @@
                             @foreach($students as $index => $student)
                                 @php
                                     $existingScore = $scores[$student->id] ?? null;
-                                    $ca1 = $existingScore->ca1 ?? '';
-                                    $ca2 = $existingScore->ca2 ?? '';
-                                    $ca3 = $existingScore->ca3 ?? '';
-                                    $exam = $existingScore->exam ?? '';
+                                    $ca1 = (float)($existingScore->ca1 ?? 0);
+                                    $ca2 = (float)($existingScore->ca2 ?? 0);
+                                    $ca3 = (float)($existingScore->ca3 ?? 0);
+                                    $exam = (float)($existingScore->exam ?? 0);
                                 @endphp
                                 <tr class="hover:bg-gray-50 border-b border-gray-300">
                                     <td class="border border-gray-300 px-4 py-3 text-center font-bold text-gray-700">{{ $index + 1 }}</td>

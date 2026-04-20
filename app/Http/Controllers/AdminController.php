@@ -642,6 +642,7 @@ public function storeStudent(Request $request)
         'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
         'date_of_birth' => 'nullable|date',
         'parent_phone_number' => 'nullable|string|max:20',
+        'sex' => 'nullable|in:male,female',
     ]);
 
     $data = [
@@ -652,6 +653,7 @@ public function storeStudent(Request $request)
         'role' => 'student',
         'date_of_birth' => $validated['date_of_birth'] ?? null,
         'parent_phone_number' => $validated['parent_phone_number'] ?? null,
+        'sex' => $validated['sex'] ?? null,
     ];
 
     if ($request->hasFile('photo')) {
@@ -683,6 +685,7 @@ public function updateStudent(Request $request, $studentId)
         'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
         'date_of_birth' => 'nullable|date',
         'parent_phone_number' => 'nullable|string|max:20',
+        'sex' => 'nullable|in:male,female',
     ]);
 
     $data = [
@@ -691,6 +694,7 @@ public function updateStudent(Request $request, $studentId)
         'class_id' => $validated['class_id'],
         'date_of_birth' => $validated['date_of_birth'] ?? null,
         'parent_phone_number' => $validated['parent_phone_number'] ?? null,
+        'sex' => $validated['sex'] ?? null,
     ];
 
     if ($request->hasFile('photo')) {

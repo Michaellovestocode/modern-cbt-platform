@@ -65,6 +65,16 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sex</label>
+                <select name="sex" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500">
+                    <option value="">-- Select Sex --</option>
+                    <option value="male" {{ old('sex', $student->sex) == 'male' ? 'selected' : '' }}>Male</option>
+                    <option value="female" {{ old('sex', $student->sex) == 'female' ? 'selected' : '' }}>Female</option>
+                </select>
+                @error('sex')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Password (leave blank to keep current)</label>
                 <input type="password" name="password"
                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"

@@ -8,6 +8,7 @@ use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherScoreController;
 use App\Http\Controllers\NigerianReportCardController;
+use App\Http\Controllers\FormTeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,16 +109,14 @@ Route::post('/admin/report-cards/{id}/comments', [NigerianReportCardController::
             Route::get('/teachers/{teacher}/subjects', [SubjectController::class, 'assignSubjects'])->name('subjects.assign-subjects');
             Route::put('/teachers/{teacher}/subjects', [SubjectController::class, 'updateSubjects'])->name('subjects.update-subjects');
 
-            // Form Teacher Management - FormTeacherController was renamed to TeacherScoreController
-            // These routes are commented out because TeacherScoreController has different methods
-            // TODO: Implement these methods in TeacherScoreController or create a new FormTeacherController
-            // Route::get('/form-teachers', [FormTeacherController::class, 'index'])->name('form-teachers.index');
-            // Route::get('/form-teachers/create', [FormTeacherController::class, 'create'])->name('form-teachers.create');
-            // Route::post('/form-teachers', [FormTeacherController::class, 'store'])->name('form-teachers.store');
-            // Route::get('/form-teachers/{formTeacher}', [FormTeacherController::class, 'show'])->name('form-teachers.show');
-            // Route::get('/form-teachers/{formTeacher}/edit', [FormTeacherController::class, 'edit'])->name('form-teachers.edit');
-            // Route::put('/form-teachers/{formTeacher}', [FormTeacherController::class, 'update'])->name('form-teachers.update');
-            // Route::delete('/form-teachers/{formTeacher}', [FormTeacherController::class, 'destroy'])->name('form-teachers.destroy');
+            // Form Teacher Management
+            Route::get('/form-teachers', [FormTeacherController::class, 'index'])->name('form-teachers.index');
+            Route::get('/form-teachers/create', [FormTeacherController::class, 'create'])->name('form-teachers.create');
+            Route::post('/form-teachers', [FormTeacherController::class, 'store'])->name('form-teachers.store');
+            Route::get('/form-teachers/{formTeacher}', [FormTeacherController::class, 'show'])->name('form-teachers.show');
+            Route::get('/form-teachers/{formTeacher}/edit', [FormTeacherController::class, 'edit'])->name('form-teachers.edit');
+            Route::put('/form-teachers/{formTeacher}', [FormTeacherController::class, 'update'])->name('form-teachers.update');
+            Route::delete('/form-teachers/{formTeacher}', [FormTeacherController::class, 'destroy'])->name('form-teachers.destroy');
         });
         
         // Exams (accessible by admin and teachers)

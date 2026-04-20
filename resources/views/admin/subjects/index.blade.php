@@ -74,18 +74,21 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex gap-2">
-                                <a href="{{ route('admin.subjects.edit', $subject->id) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm">
-                                    Edit
+                                <a href="{{ route('admin.subjects.edit', $subject->id) }}" 
+                                   class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition">
+                                    ✏️ Edit
                                 </a>
-                                <a href="{{ route('admin.subjects.assign-teachers', $subject->id) }}" class="text-purple-600 hover:text-purple-900 font-medium text-sm">
-                                    Teachers
+                                <a href="{{ route('admin.subjects.assign-teachers', $subject->id) }}" 
+                                   class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 transition">
+                                    👨‍🏫 Teachers
                                 </a>
                                 <form action="{{ route('admin.subjects.destroy', $subject->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 font-medium text-sm" 
-                                            onclick="return confirm('Are you sure?')">
-                                        Delete
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-red-100 text-red-800 hover:bg-red-200 transition"
+                                            onclick="return confirm('Are you sure you want to delete this subject? This action cannot be undone.')">
+                                        🗑️ Delete
                                     </button>
                                 </form>
                             </div>

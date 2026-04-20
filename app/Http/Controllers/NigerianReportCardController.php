@@ -93,9 +93,22 @@ $activeSession = Session::getActive();
             ->orderBy('subject_id')
             ->get();
         
+        // Get school settings
+        $schoolSettings = \App\Models\SchoolSettings::first() ?? new \App\Models\SchoolSettings();
+        
+        // Color schemes
+        $colorSchemes = [
+            'blue' => ['primary' => '#1E40AF', 'secondary' => '#3B82F6', 'light' => '#DBEAFE'],
+            'green' => ['primary' => '#15803D', 'secondary' => '#22C55E', 'light' => '#DCFCE7'],
+            'brown' => ['primary' => '#78350F', 'secondary' => '#A16207', 'light' => '#FEF3C7'],
+            'pink' => ['primary' => '#BE123C', 'secondary' => '#F472B6', 'light' => '#FCE7F3'],
+            'purple' => ['primary' => '#6B21A8', 'secondary' => '#A855F7', 'light' => '#F3E8FF'],
+        ];
+        
+        $selectedColor = $colorSchemes[$reportCard->theme_color ?? 'blue'] ?? $colorSchemes['blue'];
         $colors = ['blue', 'green', 'brown', 'pink', 'purple'];
         
-        return view('admin.report-cards.preview', compact('reportCard', 'scores', 'colors'));
+        return view('admin.report-cards.preview', compact('reportCard', 'scores', 'colors', 'schoolSettings', 'selectedColor'));
     }
     
     // ========== DOWNLOAD PDF ==========

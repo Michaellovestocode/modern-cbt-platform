@@ -266,7 +266,7 @@
                 <div class="info-cell info-label">NAME:</div>
                 <div class="info-cell" style="width: 45%;">{{ strtoupper($reportCard->student->name) }}</div>
                 <div class="info-cell info-label">GENDER:</div>
-                <div class="info-cell">{{ strtoupper($reportCard->student->gender ?? 'N/A') }}</div>
+                <div class="info-cell">{{ strtoupper($reportCard->student->sex ?? 'N/A') }}</div>
             </div>
             <div class="info-row">
                 <div class="info-cell info-label">CLASS:</div>
@@ -399,6 +399,11 @@
                         <tr><td>0-39</td><td>F9</td><td>FAIL</td></tr>
                     </table>
                 </div>
+                <!-- Grade Box -->
+            <div style="border: 2px solid #003399; text-align: center;">
+                <div style="background: #003399; color: #fff; font-weight: bold; font-size: 10px; padding: 4px;">GRADE</div>
+                <div style="font-size: 16px; font-weight: bold; color: #cc0000; padding: 10px 0;">GOOD, B3</div>
+            </div>
             </div>
         </div>
         

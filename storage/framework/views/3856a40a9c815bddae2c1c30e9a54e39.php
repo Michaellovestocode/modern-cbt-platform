@@ -108,6 +108,23 @@ unset($__errorArgs, $__bag); ?>
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sex</label>
+                <select name="sex" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500">
+                    <option value="">-- Select Sex --</option>
+                    <option value="male" <?php echo e(old('sex', $student->sex) == 'male' ? 'selected' : ''); ?>>Male</option>
+                    <option value="female" <?php echo e(old('sex', $student->sex) == 'female' ? 'selected' : ''); ?>>Female</option>
+                </select>
+                <?php $__errorArgs = ['sex'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Password (leave blank to keep current)</label>
                 <input type="password" name="password"
                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"

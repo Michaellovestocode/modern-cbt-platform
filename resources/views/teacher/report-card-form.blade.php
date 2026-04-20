@@ -154,20 +154,57 @@
                 </button>
             </div>
 
-            <!-- Overall Remark -->
+            <!-- Attendance Fields -->
             <div class="mb-6">
-                <label for="overall_remark" class="block text-sm font-medium text-gray-700 mb-2">Overall Remark</label>
-                <textarea name="overall_remark" id="overall_remark" rows="3" maxlength="500"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Enter overall performance remark...">{{ $reportCard ? $reportCard->overall_remark : '' }}</textarea>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Attendance Record</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div>
+                        <label for="days_school_opened" class="block text-sm font-medium text-gray-700 mb-2">Days School Opened</label>
+                        <input type="number" name="days_school_opened" id="days_school_opened" min="0" required
+                               value="{{ $reportCard ? $reportCard->days_school_opened : '' }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        @error('days_school_opened')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="days_present" class="block text-sm font-medium text-gray-700 mb-2">Days Present</label>
+                        <input type="number" name="days_present" id="days_present" min="0" required
+                               value="{{ $reportCard ? $reportCard->days_present : '' }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        @error('days_present')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="days_absent" class="block text-sm font-medium text-gray-700 mb-2">Days Absent</label>
+                        <input type="number" name="days_absent" id="days_absent" min="0" required
+                               value="{{ $reportCard ? $reportCard->days_absent : '' }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        @error('days_absent')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="attendance_percentage" class="block text-sm font-medium text-gray-700 mb-2">Attendance %</label>
+                        <input type="number" name="attendance_percentage" id="attendance_percentage" min="0" max="100" step="0.01" required
+                               value="{{ $reportCard ? $reportCard->attendance_percentage : '' }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        @error('attendance_percentage')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                </div>
             </div>
 
-            <!-- Teacher Comment -->
+            <!-- Class Teacher Comment -->
             <div class="mb-6">
-                <label for="teacher_comment" class="block text-sm font-medium text-gray-700 mb-2">Teacher's Comment</label>
-                <textarea name="teacher_comment" id="teacher_comment" rows="3" maxlength="500"
+                <label for="class_teacher_comment" class="block text-sm font-medium text-gray-700 mb-2">Class Teacher's Comment</label>
+                <textarea name="class_teacher_comment" id="class_teacher_comment" rows="3" maxlength="500"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Enter teacher's comment...">{{ $reportCard ? $reportCard->teacher_comment : '' }}</textarea>
+                          placeholder="Enter class teacher's comment...">{{ $reportCard ? $reportCard->class_teacher_comment : '' }}</textarea>
+                @error('class_teacher_comment')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+            </div>
+
+            <!-- Head Teacher Comment -->
+            <div class="mb-6">
+                <label for="head_teacher_comment" class="block text-sm font-medium text-gray-700 mb-2">Head Teacher's Comment</label>
+                <textarea name="head_teacher_comment" id="head_teacher_comment" rows="3" maxlength="500"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Enter head teacher's comment...">{{ $reportCard ? $reportCard->head_teacher_comment : '' }}</textarea>
+                @error('head_teacher_comment')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
 
             <!-- Submit Button -->

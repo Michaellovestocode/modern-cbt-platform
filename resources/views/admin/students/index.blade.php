@@ -86,15 +86,19 @@
                             </div>
                             <div class="flex gap-2 ml-2">
                                 <a href="{{ route('admin.student.edit', $student->id) }}" 
-                                   class="text-blue-600 hover:text-blue-800 text-sm" title="Edit">
-                                    ✏️
+                                   class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition" 
+                                   title="Edit Student">
+                                    ✏️ Edit
                                 </a>
                                 <form action="{{ route('admin.student.delete', $student->id) }}" method="POST" 
-                                      onsubmit="return confirm('Delete {{ $student->name }}?')" class="inline">
+                                      onsubmit="return confirm('Are you sure you want to delete {{ $student->name }}? This action cannot be undone.')" 
+                                      class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm" title="Delete">
-                                        🗑️
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200 transition" 
+                                            title="Delete Student">
+                                        🗑️ Delete
                                     </button>
                                 </form>
                             </div>
