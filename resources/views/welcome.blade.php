@@ -466,7 +466,7 @@
     </div>
 </div>
                 <div class="p-6 text-center">
-                    <h3 class="font-black text-gray-900 text-lg mb-1">Mrs. Precious Awe</h3>
+                    <h3 class="font-black text-gray-900 text-lg mb-1">Pst. Paul Awe</h3>
                     <p class="text-blue-600 font-semibold text-sm mb-3">School Director</p>
                     <p class="text-gray-600 text-sm leading-relaxed">20+ years of educational leadership, PhD in Educational Administration</p>
                 </div>
@@ -483,7 +483,7 @@
     </div>
 </div>
                 <div class="p-6 text-center">
-                    <h3 class="font-black text-gray-900 text-lg mb-1">Mrs. Precious Awe</h3>
+                    <h3 class="font-black text-gray-900 text-lg mb-1">DCNS. Mrs. Precious Awe</h3>
                     <p class="text-blue-600 font-semibold text-sm mb-3">School Director</p>
                     <p class="text-gray-600 text-sm leading-relaxed">20+ years of educational leadership, PhD in Educational Administration</p>
                 </div>
